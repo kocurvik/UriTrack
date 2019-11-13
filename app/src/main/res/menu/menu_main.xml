@@ -1,0 +1,41 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.kocur.tabapp.MainActivity">
+    <item
+        android:id="@+id/changeunit"
+        android:orderInCategory="100"
+        android:title="@string/measurement_units"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/exportPDF"
+        android:orderInCategory="100"
+        android:title="@string/exportPDF"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/export"
+        android:orderInCategory="100"
+        android:title="@string/export"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/imPor"
+        android:orderInCategory="100"
+        android:title="@string/imPort"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/clear"
+        android:orderInCategory="100"
+        android:title="@string/clear"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/about"
+        android:orderInCategory="100"
+        android:title="@string/about"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/help"
+        android:orderInCategory="100"
+        android:title="@string/help"
+        app:showAsAction="never" />
+
+</menu>

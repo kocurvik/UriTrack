@@ -1,0 +1,96 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeightSmall"
+    android:padding="6dip" >
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/logTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="24sp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/space6"
+        android:layout_toEndOf="@+id/space6" />
+
+    <TextView
+        android:id="@+id/logLine1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="10sp"
+        android:layout_below="@+id/space3"
+        android:layout_toRightOf="@+id/space3"
+        android:layout_toEndOf="@+id/space3" />
+
+    <TextView
+        android:id="@+id/logLine2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="10sp"
+        android:layout_alignBottom="@+id/logTime"
+        android:layout_alignLeft="@+id/logLine1"
+        android:layout_alignStart="@+id/logLine1" />
+
+    <TextView
+        android:id="@+id/logComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/logNote"
+        android:layout_toLeftOf="@+id/space7"
+        android:text="TextView"
+        android:textSize="8sp"
+        android:visibility="invisible" />
+
+    <Space
+        android:id="@+id/space3"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/logTime"
+        android:layout_toEndOf="@+id/logTime"
+        android:layout_toRightOf="@+id/logTime" />
+
+    <TextView
+        android:id="@+id/logNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="Note:"
+        android:textSize="10sp"
+        android:visibility="invisible" />
+
+    <Space
+        android:id="@+id/space7"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_toEndOf="@+id/logLine1"
+        android:layout_toRightOf="@+id/logLine1" />
+
+    <Space
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/logComment"
+        android:layout_toEndOf="@+id/imageView"
+        android:layout_toRightOf="@+id/imageView"
+        android:id="@+id/space6" />
+
+</RelativeLayout>

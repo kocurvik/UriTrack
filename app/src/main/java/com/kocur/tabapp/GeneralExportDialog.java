@@ -1,0 +1,105 @@
+package com.kocur.tabapp;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.content.FileProvider;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.io.File;
+import java.util.Calendar;
+
+/**
+ * Created by kocur on 8/26/2017.
+ * Abstraction, since performAction and performAction PDF are similar
+ */
+
+public abstract class GeneralExportDialog extends DialogFragment implements View.OnClickListener {
+    protected EditText fromDate, toDate;
+    protected Button exportButton;
+    protected DateManager dateManager;
+    protected TextView infoText;
+    private TextView fromText,toText;
+
+    public GeneralExportDialog() {
+        // Empty constructor is required for DialogFragment
+        // Make sure not to add arguments to the constructor
+        // Use `newInstance` instead as shown below
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.dialog_export, container);
+
+        this.exportButton = (Button) rootView.findViewById(R.id.exportButton);
+        exportButton.setOnClickListener(this);
+        this.fromDate = (EditText) rootView.findViewById(R.id.fromExportDate);
+        fromDate.setOnClickListener(this);
+        this.toDate = (EditText) rootView.findViewById(R.id.toExportDate);
+        toDate.setOnClickListener(this);
+        this.infoText = (TextView) rootView.findViewById(R.id.dialogInfo);
+        this.toText = (TextView) rootView.findViewById(R.id.textView7);
+        this.fromText = (TextView) rootView.findViewById(R.id.textView8);
+
+
+
+
+        this.dateManager = new DateManager(getContext(),fromDate,toDate);
+        dateManager.setDate(-7, Calendar.DATE);
+
+        return rootView;
+    }
+
+    public void showDatePickerDialog(EditText dateText) {
+        DatePickerFragment newFragment = new DatePickerFragment();
+        newFragment.setEditText(dateText);
+        newFragment.show(getFragmentManager(), "datePicker");
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.exportButton: {
+                performAction();
+                break;
+            }
+            case R.id.fromExportDate:{
+                showDatePickerDialog(fromDate);
+                break;
+            }
+            case R.id.toExportDate: {
+                showDatePickerDialog(toDate);
+                break;
+            }
+        }
+    }
+
+    protected void setInvisible(){
+        this.toDate.setVisibility(View.INVISIBLE);
+        this.fromDate.setVisibility(View.INVISIBLE);
+        toText.setVisibility(View.INVISIBLE);
+        fromText.setVisibility(View.INVISIBLE);
+    }
+
+
+    protected void sendIntent(File outputFile){
+        Uri contentUri = FileProvider.getUriForFile(getContext(), "com.kocur.tabapp.fileprovider", outputFile);
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+        shareIntent.setDataAndType(contentUri, getContext().getContentResolver().getType(contentUri));
+        shareIntent.setType("*/*");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+        startActivity(Intent.createChooser(shareIntent, "Choose an app"));
+    }
+
+    abstract void performAction();
+
+}
