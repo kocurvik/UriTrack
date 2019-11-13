@@ -1,0 +1,90 @@
+<!-- fragment_edit_name.xml -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
+
+    <Button
+        android:id="@+id/importButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Import"
+        android:layout_below="@+id/space19"
+        android:layout_centerHorizontal="true" />
+
+    <Space
+        android:id="@+id/space15"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/dialogInfo"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/dialogInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:maxWidth="250dp"
+        android:text="Import a zip file exported from this or another device. The imported events will be added to your log preserving your current data. If you want to overwrite the daily logs with the imported ones, please check the box below." />
+
+    <CheckBox
+        android:id="@+id/overwriteBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/space15"
+        android:layout_centerHorizontal="true"
+        android:checked="false"
+        android:text="Overwrite" />
+
+    <Space
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:id="@+id/space11"
+        android:layout_below="@+id/overwriteBox"
+        android:layout_alignLeft="@+id/space15"
+        android:layout_alignStart="@+id/space15" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/space11"
+        android:layout_centerHorizontal="true"
+        android:text="Check this box if you have exported the data in different units and want to convert them. Note that the data with different measurement units will not be imported if you don't check this box." />
+
+    <Space
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:id="@+id/space13"
+        android:layout_below="@+id/textView4"
+        android:layout_alignLeft="@+id/space11"
+        android:layout_alignStart="@+id/space11" />
+
+    <CheckBox
+        android:id="@+id/convertBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/space13"
+        android:layout_centerHorizontal="true"
+        android:text="Convert units" />
+
+    <Space
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:id="@+id/space19"
+        android:layout_below="@+id/convertBox"
+        android:layout_alignLeft="@+id/space13"
+        android:layout_alignStart="@+id/space13" />
+
+</android.widget.RelativeLayout>
+</ScrollView>
