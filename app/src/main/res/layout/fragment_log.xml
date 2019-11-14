@@ -131,13 +131,13 @@
             android:id="@+id/toggleCatheterPic"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_weight="1"
             app:srcCompat="@drawable/catheter" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1"></Space>
+            android:layout_weight="1" >
+        </Space>
 
     </LinearLayout>
 

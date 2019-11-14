@@ -298,7 +298,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
         }
     }
 
-    public enum types {Urination, Intake, Leak, Urge};
+    public enum types {Urination, Intake, Leak, Catheter, Urge};
     public enum drinks {Water, Soda, Juice, Coffee, Tea, Beer, Wine, Alcohol, Soup, Fruit, DecafCoffee, DecafTea ,Other}
     //public enum drinks {"Water", "Soda", "Juice", "Coffee", "Tea", "Beer", "Wine", "Alcohol", "Soup", "Fruit", "Decaf Coffee", "Decaf Tea" ,"Other"}
     @Override

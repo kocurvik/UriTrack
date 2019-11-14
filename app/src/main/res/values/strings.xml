@@ -17,25 +17,33 @@
         <item>Fluid Intake</item>
         <item>Leak</item>
         <item>Urge</item>
+        <item>Catheter</item>
     </string-array>
 
     <string-array name="analytics_types">
-        <item>Volume Urinated</item>
+        <item>Volume urinated</item>
         <item>Intake volume</item>
         <item>Volume leaked</item>
-        <item>Volume voided</item>
+        <item>Volume voided via Catheter</item>
+        <item>Volume voided (all types)</item>
         <item>Daily urinations</item>
         <item>Daily leaks</item>
         <item>Daily drinks/fluid intakes</item>
         <item>Daily non-voiding urges</item>
+        <item>Daily catheter voidings</item>
         <item>Average urination volume</item>
         <item>Average urination urge intensity</item>
         <item>Average leak volume</item>
         <item>Average leak urge intensity</item>
         <item>Average intake volume</item>
         <item>Average non-voiding urge intesity</item>
+        <item>Average catheter voiding volume</item>
+        <item>Average catheter voiding urge intesity</item>
         <item>Intake to voided volume (%)</item>
         <item>Voided to intake volume (%)</item>
+        <item>Percent voided via urination </item>
+        <item>Percent voided via leaks</item>
+        <item>Percent voided via catheter</item>
     </string-array>
 
     <string-array name="volume_units">

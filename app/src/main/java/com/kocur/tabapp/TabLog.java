@@ -34,7 +34,7 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
 
     private EditText dateText;
     private ListView logView;
-    private ImageView toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic;
+    private ImageView toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic;
     private TextView ioTextView;
 
     @Override
@@ -60,6 +60,7 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
         toggleIntakePic = (ImageView) rootView.findViewById(R.id.toggleIntakePic);
         toggleLeakPic = (ImageView) rootView.findViewById(R.id.toggleLeakPic);
         toggleUrgePic = (ImageView) rootView.findViewById(R.id.toggleUrgePic);
+        toggleCatheterPic = (ImageView) rootView.findViewById(R.id.toggleCatheterPic);
 
         ioTextView = (TextView) rootView.findViewById(R.id.ioTextView);
 
@@ -67,6 +68,7 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
         toggleLeakPic.setOnClickListener(this);
         toggleUrgePic.setOnClickListener(this);
         toggleIntakePic.setOnClickListener(this);
+        toggleCatheterPic.setOnClickListener(this);
 
         //this.populate();
 
@@ -107,12 +109,12 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
             manager.writeList(list);
             //Log.d("I","list loaded");
             LogAdapter adapter = new LogAdapter(getContext(), list,this,manager);
-            adapter.setup(toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic);
+            adapter.setup(toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic);
             logView.setAdapter(adapter);
             float intake = 0;
             float output = 0;
             for(UriEvent event: list){
-                if (event.getType().equals("Urination") || event.getType().equals("Leak"))
+                if (event.getType().equals("Urination") || event.getType().equals("Leak") || event.getType().equals("Catheter"))
                     output += event.getVolume();
                 if (event.getType().equals("Fluid Intake"))
                     intake += event.getVolume();
@@ -207,6 +209,14 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
                 ((LogAdapter) logView.getAdapter()).notifyDataSetChanged();
                 break;
             }
+            case R.id.toggleCatheterPic:{
+                if (toggleCatheterPic.getAlpha() == 1f)
+                    toggleCatheterPic.setAlpha(0.2f);
+                else
+                    toggleCatheterPic.setAlpha(1f);
+                ((LogAdapter) logView.getAdapter()).notifyDataSetChanged();
+                break;
+            }
         }
     }
 
@@ -273,7 +283,7 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
             manager.writeList(list);
             //Log.d("I","list loaded");
             LogAdapter adapter = new LogAdapter(getContext(), list,this,manager);
-            adapter.setup(toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic);
+            adapter.setup(toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic);
             logView.setAdapter(adapter);
             ((MainActivity) getActivity()).notifyChange(dateText,true);
         } else {

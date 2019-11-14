@@ -359,87 +359,139 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
                     if (event.getType().equals("Leak"))
                         val += event.getVolume();
                     break;
-                //Total Volume Voided
+                //Volume Voided via Catheter
                 case 3:
-                    if (event.getType().equals("Urination") || event.getType().equals("Leak"))
+                    if (event.getType().equals("Catheter"))
+                        val += event.getVolume();
+                    break;
+                //Total Volume Voided
+                case 4:
+                    if (event.getType().equals("Urination") || event.getType().equals("Leak") || event.getType().equals("Catheter"))
                         val += event.getVolume();
                     break;
                 //Daily Urinations
-                case 4:
+                case 5:
                     if (event.getType().equals("Urination"))
                         val += 1;
                     break;
                 //Daily Leaks
-                case 5:
+                case 6:
                     if (event.getType().equals("Leak"))
                         val += 1;
                     break;
                 //Daily drinks/intake
-                case 6:
+                case 7:
                     if (event.getType().equals("Fluid Intake"))
                         val += 1;
                     break;
                 //Daily Non-voiding Urges
-                case 7:
+                case 8:
                     if (event.getType().equals("Urge"))
                         val += 1;
                     break;
+                //Daily Chatheter Voidings
+                case 9:
+                    if (event.getType().equals("Catheter"))
+                        val += 1;
+                    break;
                 //Daily Average Urination Volume
-                case 8:
+                case 10:
                     if (event.getType().equals("Urination")) {
                         val += event.getVolume();
                         num += 1;
                     }
                     break;
                 //Daily Average Urination Urge
-                case 9:
-                    if (event.getType().equals("Urination")) {
-                        val += event.getIntensity();
-                        num += 1;
-                    }
-                    break;
-                // Daily average leak volume
-                case 10:
-                    if (event.getType().equals("Leak")) {
-                        val += event.getVolume();
-                        num += 1;
-                    }
-                    break;
-                //Daily Average leak Urge intensity
                 case 11:
                     if (event.getType().equals("Urination")) {
                         val += event.getIntensity();
                         num += 1;
                     }
                     break;
-                //Daily Average Intake Volume
+                // Daily average leak volume
                 case 12:
+                    if (event.getType().equals("Leak")) {
+                        val += event.getVolume();
+                        num += 1;
+                    }
+                    break;
+                //Daily Average leak Urge intensity
+                case 13:
+                    if (event.getType().equals("Urination")) {
+                        val += event.getIntensity();
+                        num += 1;
+                    }
+                    break;
+                //Daily Average Intake Volume
+                case 14:
                     if (event.getType().equals("Fluid Intake")) {
                         val += event.getVolume();
                         num += 1;
                     }
                     break;
                 //Daily average Non-voiding Urge Intesity
-                case 13:
+                case 15:
                     if (event.getType().equals("Urge")) {
                         val += event.getIntensity();
                         num += 1;
                     }
                     break;
-                case 14:
+                //Daily average catheter voiding volume
+                case 16:
+                    if (event.getType().equals("Catheter")) {
+                        val += event.getVolume();
+                        num += 1;
+                    }
+                    break;
+                //Daily average catheter urge intesity
+                case 17:
+                    if (event.getType().equals("Catheter")) {
+                        val += event.getIntensity();
+                        num += 1;
+                    }
+                    break;
+
+                // Intake to voided volume percent
+                case 18:
                     if (event.getType().equals("Fluid Intake"))
                         val += event.getVolume();
-                    if (event.getType().equals("Urination") || event.getType().equals("Leak"))
+                    if (event.getType().equals("Urination") || event.getType().equals("Leak") || event.getType().equals("Catheter"))
                         val2 += event.getVolume();
                     break;
-                case 15:
+
+                // Voided to intake volume
+                case 19:
                     if (event.getType().equals("Fluid Intake"))
                         val2 += event.getVolume();
-                    if (event.getType().equals("Urination") || event.getType().equals("Leak"))
+                    if (event.getType().equals("Urination") || event.getType().equals("Leak") || event.getType().equals("Catheter"))
                         val += event.getVolume();
+                    break;
+                // Urinated to total voided volume (%)
+                case 20:
+                    if (event.getType().equals("Urination"))
+                        val += event.getVolume();
+                    if (event.getType().equals("Urination") || event.getType().equals("Leak") || event.getType().equals("Catheter"))
+                        val2 += event.getVolume();
+                    break;
+
+                // Leaked to total voided volume (%)
+                case 21:
+                    if (event.getType().equals("Leak"))
+                        val += event.getVolume();
+                    if (event.getType().equals("Urination") || event.getType().equals("Leak") || event.getType().equals("Catheter"))
+                        val2 += event.getVolume();
+                    break;
+                // Catheter to total voided volume (%)
+                case 22:
+                    if (event.getType().equals("Catheter"))
+                        val += event.getVolume();
+                    if (event.getType().equals("Urination") || event.getType().equals("Leak") || event.getType().equals("Catheter"))
+                        val2 += event.getVolume();
             }
+
+
         }
-        if (spinner.getSelectedItemPosition() > 13)
+        if (spinner.getSelectedItemPosition() > 17)
             if (val2 > 0f)
                 val = (val/val2) * 100f;
             else

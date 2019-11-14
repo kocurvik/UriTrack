@@ -28,7 +28,7 @@ public class LogAdapter extends ArrayAdapter<UriEvent> {
     private ArrayList<UriEvent> list;
     private final TabLog tabLog;
     private CSVManager manager;
-    private ImageView toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic;
+    private ImageView toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic;
 
     public LogAdapter(Context context, ArrayList<UriEvent> list, TabLog tabLog, CSVManager manager) throws IOException {
         super(context, -1, list);
@@ -83,6 +83,9 @@ public class LogAdapter extends ArrayAdapter<UriEvent> {
             return new Space(context);
 
         if(event.getType().equals("Urge") && toggleUrgePic.getAlpha() != 1f)
+            return new Space(context);
+
+        if(event.getType().equals("Catheter") && toggleCatheterPic.getAlpha() != 1f)
             return new Space(context);
 
         LayoutInflater inflater = (LayoutInflater) context
@@ -143,6 +146,13 @@ public class LogAdapter extends ArrayAdapter<UriEvent> {
                 textView2.setText("");
                 break;
             }
+
+            case "Catheter":{
+                imageView.setImageResource(R.drawable.catheter);
+                textView1.setText("Volume: " + event.getVolStr() + " " + MainActivity.getVolumeString());
+                textView2.setText("Intensity: " + event.getIntStr());
+                break;
+            }
         }
 
         return logView;
@@ -155,10 +165,11 @@ public class LogAdapter extends ArrayAdapter<UriEvent> {
      * @param toggleLeakPic
      * @param toggleUrgePic
      */
-    public void setup(ImageView toggleUrinationPic, ImageView toggleIntakePic, ImageView toggleLeakPic, ImageView toggleUrgePic) {
+    public void setup(ImageView toggleUrinationPic, ImageView toggleIntakePic, ImageView toggleLeakPic, ImageView toggleUrgePic, ImageView toggleCatheterPic) {
         this.toggleUrinationPic = toggleUrinationPic;
         this.toggleIntakePic = toggleIntakePic;
         this.toggleLeakPic = toggleLeakPic;
         this.toggleUrgePic = toggleUrgePic;
+        this.toggleCatheterPic = toggleCatheterPic;
     }
 }

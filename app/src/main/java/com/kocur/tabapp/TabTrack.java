@@ -293,7 +293,7 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
         unitText.setText(MainActivity.getVolumeString());
     }
 
-    public enum types {Urination, Intake, Leak, Urge};
+    public enum types {Urination, Intake, Leak, Urge, Catheter};
     public enum drinks {Water, Soda, Juice, Coffee, Tea, Beer, Wine, Alcohol, Soup, Fruit, DecafCoffee, DecafTea, Other}
 
     /**

@@ -147,6 +147,7 @@ class UriEvent {
             case "Fluid Intake": return 1;
             case "Leak": return 2;
             case "Urge": return 3;
+            case "Catheter": return 4;
             default: return 0;
         }
     }
