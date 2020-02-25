@@ -5,4 +5,4 @@ You can find the app on [Play Store](https://play.google.com/store/apps/details?
 
 # Privacy policy
 
-No data entered into the app is collected by the developer.
+The developer does not collect nor does he have have access to the data you input in the app.
