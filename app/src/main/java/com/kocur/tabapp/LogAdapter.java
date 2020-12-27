@@ -5,12 +5,16 @@ package com.kocur.tabapp;
  */
 
 import android.content.Context;
+import android.media.Image;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
@@ -28,7 +32,7 @@ public class LogAdapter extends ArrayAdapter<UriEvent> {
     private ArrayList<UriEvent> list;
     private final TabLog tabLog;
     private CSVManager manager;
-    private ImageView toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic;
+    private ImageView toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic, toggleNotePic;
 
     public LogAdapter(Context context, ArrayList<UriEvent> list, TabLog tabLog, CSVManager manager) throws IOException {
         super(context, -1, list);
@@ -86,6 +90,9 @@ public class LogAdapter extends ArrayAdapter<UriEvent> {
             return new Space(context);
 
         if(event.getType().equals("Catheter") && toggleCatheterPic.getAlpha() != 1f)
+            return new Space(context);
+
+        if(event.getType().equals("Note") && toggleNotePic.getAlpha() != 1f)
             return new Space(context);
 
         LayoutInflater inflater = (LayoutInflater) context
@@ -153,6 +160,19 @@ public class LogAdapter extends ArrayAdapter<UriEvent> {
                 textView2.setText("Intensity: " + event.getIntStr());
                 break;
             }
+
+            case "Note":{
+                imageView.setImageResource(R.drawable.note);
+//                textView1.setTextSize(9);
+                textView1.setText("Note: " + event.getNote());
+                textView1.setMaxLines(2);
+                textView1.setEllipsize(TextUtils.TruncateAt.END);
+                textView2.setText("");
+                note.setVisibility(View.INVISIBLE);
+                textComment.setVisibility(View.INVISIBLE);;
+
+                break;
+            }
         }
 
         return logView;
@@ -164,12 +184,14 @@ public class LogAdapter extends ArrayAdapter<UriEvent> {
      * @param toggleIntakePic
      * @param toggleLeakPic
      * @param toggleUrgePic
+     * @param toggleNotePic
      */
-    public void setup(ImageView toggleUrinationPic, ImageView toggleIntakePic, ImageView toggleLeakPic, ImageView toggleUrgePic, ImageView toggleCatheterPic) {
+    public void setup(ImageView toggleUrinationPic, ImageView toggleIntakePic, ImageView toggleLeakPic, ImageView toggleUrgePic, ImageView toggleCatheterPic, ImageView toggleNotePic) {
         this.toggleUrinationPic = toggleUrinationPic;
         this.toggleIntakePic = toggleIntakePic;
         this.toggleLeakPic = toggleLeakPic;
         this.toggleUrgePic = toggleUrgePic;
         this.toggleCatheterPic = toggleCatheterPic;
+        this.toggleNotePic = toggleNotePic;
     }
 }

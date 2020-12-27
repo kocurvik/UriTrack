@@ -112,7 +112,7 @@ class UriEvent {
     public String getIntStr() { return String.format(Locale.US, "%.0f", this.intensity);}
 
     public String getDrink(){
-        if (drinkType != "Other")
+        if (!drinkType.equals("Other"))
             return drinkType;
         else
             return otherDrink;
@@ -148,6 +148,7 @@ class UriEvent {
             case "Leak": return 2;
             case "Urge": return 3;
             case "Catheter": return 4;
+            case "Note": return 5;
             default: return 0;
         }
     }

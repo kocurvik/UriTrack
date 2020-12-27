@@ -1,11 +1,14 @@
 package com.kocur.tabapp;
 
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.text.LoginFilter;
 import android.util.Log;
 import android.view.Gravity;
@@ -13,10 +16,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +61,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
     private TextView volumeText2;
     private TextView drinkText1;
     private TextView intensityText1;
+    private TextView intensityText2;
 
     public EditDialog() {
         // Empty constructor is required for DialogFragment
@@ -68,11 +75,28 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
         getDialog().setTitle("Edit");
     }
 
+    @Override
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
+
+        // the content
+        final RelativeLayout root = new RelativeLayout(getActivity());
+        root.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        // creating the fullscreen dialog
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(root);
+//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+        return dialog;
+    }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         View rootView = inflater.inflate(R.layout.dialog_edit, container);
         Button deleteButton = (Button) rootView.findViewById(R.id.deleteButton);
         deleteButton.setOnClickListener(this);
@@ -118,6 +142,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
         this.volumeText2 = (TextView) rootView.findViewById(R.id.textVolume2);
         this.drinkText1 = (TextView) rootView.findViewById(R.id.drinkText1);
         this.intensityText1 = (TextView) rootView.findViewById(R.id.intensityText1);
+        this.intensityText2 = (TextView) rootView.findViewById(R.id.textIntensity2);
 
         this.typeSpinner = (Spinner) rootView.findViewById(R.id.typeEdit);
         typeSpinner.setOnItemSelectedListener(this);
@@ -125,7 +150,10 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
 
         this.drinkSpinner = (Spinner) rootView.findViewById(R.id.drinkSpinner);
         drinkSpinner.setOnItemSelectedListener(this);
-        drinkSpinner.setSelection(EditDialog.drinks.valueOf(event.getDrinkType().replaceAll("\\s+","")).ordinal());
+        drinkSpinner.setSelection(TabTrack.drinks.valueOf(event.getDrinkType().replaceAll("\\s+","")).ordinal());
+
+        noteText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        noteText.setRawInputType(InputType.TYPE_CLASS_TEXT);
 
         return rootView;
     }
@@ -298,9 +326,6 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
         }
     }
 
-    public enum types {Urination, Intake, Leak, Catheter, Urge};
-    public enum drinks {Water, Soda, Juice, Coffee, Tea, Beer, Wine, Alcohol, Soup, Fruit, DecafCoffee, DecafTea ,Other}
-    //public enum drinks {"Water", "Soda", "Juice", "Coffee", "Tea", "Beer", "Wine", "Alcohol", "Soup", "Fruit", "Decaf Coffee", "Decaf Tea" ,"Other"}
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         //Log.d("I", "onItemSelected");
@@ -311,65 +336,35 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
             /*Button plusButtonVolume = (Button) rootView.findViewById(R.id.minusButtonVolume);
             Button minusButtonVolume = (Button) rootView.findViewById(R.id.plusButtonVolume);*/
 
-
-            if (position == TabTrack.types.Urge.ordinal()) {
-                volumeText1.setAlpha(0.2f);
-                volumeText2.setAlpha(0.2f);
-                volumeText.setAlpha(0.2f);
-                volumeText.setFocusable(false);
-                volumeText.setFocusableInTouchMode(false);
-                plusButtonVolume.setAlpha(0.2f);
-                minusButtonVolume.setAlpha(0.2f);
-                plusButtonVolume.setClickable(false);
-                minusButtonVolume.setClickable(false);
-            } else {
-                volumeText1.setAlpha(1f);
-                volumeText2.setAlpha(1f);
-                volumeText.setAlpha(1f);
-                plusButtonVolume.setAlpha(1f);
-                minusButtonVolume.setAlpha(1f);
-                volumeText.setFocusable(true);
-                volumeText.setFocusableInTouchMode(true);
-                plusButtonVolume.setClickable(true);
-                minusButtonVolume.setClickable(true);
+            if (position == TabTrack.types.Urination.ordinal() || position == TabTrack.types.Catheter.ordinal() || position == TabTrack.types.Leak.ordinal()) {
+                // Volume enabled
+                EnableVolume();
+                EnableIntensity();
+                DisableDrink();
             }
 
-            if (position != TabTrack.types.Intake.ordinal()){
-                drinkText.setAlpha(0.2f);
-                drinkText1.setAlpha(0.2f);
-                drinkText.setFocusableInTouchMode(false);
-                drinkText.setFocusable(false);
-                //drinkSpinner.setAlpha(Math.min(0.2f,drinkSpinner.getAlpha()));
-                drinkSpinner.setAlpha(0.2f);
-                drinkSpinner.setEnabled(false);
-                intensityText.setAlpha(1f);
-                intensityText1.setAlpha(1f);
-                plusButtonIntensity.setAlpha(1f);
-                minusButtonIntensity.setAlpha(1f);
-                plusButtonIntensity.setClickable(true);
-                minusButtonIntensity.setClickable(true);
-            } else {
-                drinkText.setAlpha(1f);
-                drinkText1.setAlpha(1f);
-                drinkText.setFocusableInTouchMode(true);
-                drinkText.setFocusable(true);
-                /*if (!other) {
-                    drinkSpinner.setAlpha(1f);
-                }*/
-                drinkSpinner.setAlpha(1f);
-                drinkSpinner.setEnabled(true);
-                intensityText.setAlpha(0.2f);
-                intensityText1.setAlpha(0.2f);
-                plusButtonIntensity.setAlpha(0.2f);
-                minusButtonIntensity.setAlpha(0.2f);
-                plusButtonIntensity.setClickable(false);
-                minusButtonIntensity.setClickable(false);
+            if (position == TabTrack.types.Urge.ordinal()) {
+                DisableVolume();
+                EnableIntensity();
+                DisableDrink();
+            }
+
+            if (position == TabTrack.types.Note.ordinal()){
+                DisableVolume();
+                DisableIntensity();
+                DisableDrink();
+            }
+
+            if (position == TabTrack.types.Intake.ordinal()) {
+                DisableIntensity();
+                EnableVolume();
+                EnableDrink();
             }
         }
 
         if (view != null && ((View) view.getParent()).getId() == R.id.drinkSpinner){
             //Log.d("I","drinkSpinner");
-            if (position == drinks.Other.ordinal() ){
+            if (position == TabTrack.drinks.Other.ordinal() ){
                 other = true;
                 drinkText.setVisibility(View.VISIBLE);
                 ((TextView) drinkSpinner.getChildAt(0)).setTextColor(Color.WHITE);
@@ -382,6 +377,72 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
             }
 
         }
+    }
+
+    private void EnableDrink() {
+        drinkText.setAlpha(1f);
+        drinkText1.setAlpha(1f);
+        drinkText.setFocusableInTouchMode(true);
+        drinkText.setFocusable(true);
+        drinkSpinner.setAlpha(1f);
+        drinkSpinner.setEnabled(true);
+    }
+
+    private void DisableDrink() {
+        drinkText.setAlpha(0.2f);
+        drinkText1.setAlpha(0.2f);
+        drinkSpinner.setAlpha(0.2f);
+        drinkText.setFocusableInTouchMode(false);
+        drinkText.setFocusable(false);
+        drinkSpinner.setEnabled(false);
+    }
+
+    private void DisableVolume() {
+        volumeText1.setAlpha(0.2f);
+        volumeText2.setAlpha(0.2f);
+        volumeText.setAlpha(0.2f);
+        volumeText.setFocusable(false);
+        volumeText.setFocusableInTouchMode(false);
+        plusButtonVolume.setAlpha(0.2f);
+        minusButtonVolume.setAlpha(0.2f);
+        plusButtonVolume.setClickable(false);
+        minusButtonVolume.setClickable(false);
+    }
+
+    private void EnableVolume() {
+        volumeText1.setAlpha(1f);
+        volumeText2.setAlpha(1f);
+        volumeText.setAlpha(1f);
+        plusButtonVolume.setAlpha(1f);
+        minusButtonVolume.setAlpha(1f);
+        volumeText.setFocusable(true);
+        volumeText.setFocusableInTouchMode(true);
+        plusButtonVolume.setClickable(true);
+        minusButtonVolume.setClickable(true);
+    }
+
+    private void EnableIntensity() {
+        intensityText1.setAlpha(1f);
+        intensityText2.setAlpha(1f);
+        intensityText.setAlpha(1f);
+        plusButtonIntensity.setAlpha(1f);
+        minusButtonIntensity.setAlpha(1f);
+        intensityText.setFocusable(true);
+        intensityText.setFocusableInTouchMode(true);
+        plusButtonIntensity.setClickable(true);
+        minusButtonIntensity.setClickable(true);
+    }
+
+    private void DisableIntensity(){
+        intensityText1.setAlpha(0.2f);
+        intensityText2.setAlpha(0.2f);
+        intensityText.setAlpha(0.2f);
+        plusButtonIntensity.setAlpha(0.2f);
+        minusButtonIntensity.setAlpha(0.2f);
+        intensityText.setFocusable(false);
+        intensityText.setFocusableInTouchMode(false);
+        plusButtonIntensity.setClickable(false);
+        minusButtonIntensity.setClickable(false);
     }
 
     @Override

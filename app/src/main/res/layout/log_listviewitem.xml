@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeightSmall"
+    android:layout_height="?attr/listPreferredItemHeightSmall"
     android:padding="6dip" >
 
 
@@ -25,38 +25,61 @@
         android:layout_toRightOf="@+id/space6"
         android:layout_toEndOf="@+id/space6" />
 
+    <RelativeLayout
+        android:id="@+id/lines"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/space3"
+        android:layout_toRightOf="@+id/space3"
+        android:layout_toEndOf="@+id/space3"
+        android:layout_alignBottom="@+id/logTime"
+        >
+
     <TextView
         android:id="@+id/logLine1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:textSize="10sp"
-        android:layout_below="@+id/space3"
-        android:layout_toRightOf="@+id/space3"
-        android:layout_toEndOf="@+id/space3" />
+        android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/logLine2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="10sp"
-        android:layout_alignBottom="@+id/logTime"
-        android:layout_alignLeft="@+id/logLine1"
-        android:layout_alignStart="@+id/logLine1" />
+        <TextView
+            android:id="@+id/logLine2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/logLine1"
+            android:layout_alignLeft="@+id/logLine1"
+            android:layout_below="@+id/logLine1"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:text="TextView"
+            android:maxLength="20"
+            android:ellipsize="end"
+            android:textSize="12sp"
+            android:gravity="left"
+            android:maxLines="1"
+            android:scrollHorizontally="false"/>
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/logComment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:maxLines="2"
+        android:lines="2"
+        android:singleLine="false"
+        android:ellipsize="end"
+        android:scrollHorizontally="false"
+        android:layout_toRightOf="@id/space8"
+        android:layout_below="@+id/logNote"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/logNote"
+        android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/space7"
         android:text="TextView"
         android:textSize="8sp"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:gravity="right" />
 
     <Space
         android:id="@+id/space3"
@@ -82,8 +105,8 @@
         android:layout_width="20dp"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/imageView"
-        android:layout_toEndOf="@+id/logLine1"
-        android:layout_toRightOf="@+id/logLine1" />
+        android:layout_toEndOf="@+id/lines"
+        android:layout_toRightOf="@+id/lines" />
 
     <Space
         android:layout_width="10dp"
@@ -92,5 +115,11 @@
         android:layout_toEndOf="@+id/imageView"
         android:layout_toRightOf="@+id/imageView"
         android:id="@+id/space6" />
+
+    <Space
+        android:id="@+id/space8"
+        android:layout_width="8dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/lines"/>
 
 </RelativeLayout>

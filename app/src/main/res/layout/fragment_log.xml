@@ -139,6 +139,17 @@
             android:layout_weight="1" >
         </Space>
 
+        <ImageView
+            android:id="@+id/toggleNotePic"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/note" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"></Space>
+
     </LinearLayout>
 
     <TextView

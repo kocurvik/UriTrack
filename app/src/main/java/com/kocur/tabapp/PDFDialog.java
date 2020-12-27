@@ -53,7 +53,7 @@ public class PDFDialog extends GeneralExportDialog {
                 /*File outputDir = getContext().getCacheDir(); // context being the Activity pointer*/
             File outputFile = File.createTempFile("UriTrackSheet-", ".pdf", filePath);
 
-            Document document = new Document(PageSize.A4, 0, 0, 0, 0);
+            Document document = new Document(PageSize.A4, 0, 0, 50, 50);
             FileOutputStream out = new FileOutputStream(outputFile);
             PdfWriter.getInstance(document, out);
             document.open();
@@ -121,7 +121,8 @@ public class PDFDialog extends GeneralExportDialog {
                 table.addCell(cell);
 
                 table.addCell(e.getType());
-                if (e.getType().equals("Urge")) {
+
+                if (e.getType().equals("Urge") || e.getType().equals("Note")) {
                     cell = new PdfPCell(new Phrase(" "));
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     cell.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -132,7 +133,7 @@ public class PDFDialog extends GeneralExportDialog {
                     cell.setVerticalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
                 }
-                if (e.getType().equals("Fluid Intake")) {
+                if (e.getType().equals("Fluid Intake") || e.getType().equals("Note")) {
                     cell = new PdfPCell(new Phrase(" "));
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     cell.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -162,11 +163,12 @@ public class PDFDialog extends GeneralExportDialog {
                     table.addCell(cell);
                 }
                 cell = new PdfPCell(new Phrase(e.getNote()));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
                 cell.setVerticalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
                 listr--;
                 remaining--;
+
             }
         }
         if (table == null) {

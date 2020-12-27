@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,7 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
 
     private EditText dateText;
     private ListView logView;
-    private ImageView toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic;
+    private ImageView toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic, toggleNotePic;
     private TextView ioTextView;
 
     @Override
@@ -61,6 +60,7 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
         toggleLeakPic = (ImageView) rootView.findViewById(R.id.toggleLeakPic);
         toggleUrgePic = (ImageView) rootView.findViewById(R.id.toggleUrgePic);
         toggleCatheterPic = (ImageView) rootView.findViewById(R.id.toggleCatheterPic);
+        toggleNotePic = (ImageView) rootView.findViewById(R.id.toggleNotePic);
 
         ioTextView = (TextView) rootView.findViewById(R.id.ioTextView);
 
@@ -69,6 +69,7 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
         toggleUrgePic.setOnClickListener(this);
         toggleIntakePic.setOnClickListener(this);
         toggleCatheterPic.setOnClickListener(this);
+        toggleNotePic.setOnClickListener(this);
 
         //this.populate();
 
@@ -109,7 +110,7 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
             manager.writeList(list);
             //Log.d("I","list loaded");
             LogAdapter adapter = new LogAdapter(getContext(), list,this,manager);
-            adapter.setup(toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic);
+            adapter.setup(toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic, toggleNotePic);
             logView.setAdapter(adapter);
             float intake = 0;
             float output = 0;
@@ -217,6 +218,14 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
                 ((LogAdapter) logView.getAdapter()).notifyDataSetChanged();
                 break;
             }
+            case R.id.toggleNotePic:{
+                if (toggleNotePic.getAlpha() == 1f)
+                    toggleNotePic.setAlpha(0.2f);
+                else
+                    toggleNotePic.setAlpha(1f);
+                ((LogAdapter) logView.getAdapter()).notifyDataSetChanged();
+                break;
+            }
         }
     }
 
@@ -283,7 +292,7 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
             manager.writeList(list);
             //Log.d("I","list loaded");
             LogAdapter adapter = new LogAdapter(getContext(), list,this,manager);
-            adapter.setup(toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic);
+            adapter.setup(toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic, toggleNotePic);
             logView.setAdapter(adapter);
             ((MainActivity) getActivity()).notifyChange(dateText,true);
         } else {

@@ -18,6 +18,7 @@
         <item>Leak</item>
         <item>Urge</item>
         <item>Catheter</item>
+        <item>Note</item>>
     </string-array>
 
     <string-array name="analytics_types">

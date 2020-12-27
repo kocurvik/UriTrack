@@ -1,10 +1,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.widget.RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.kocur.tabapp.MainActivity$PlaceholderFragment">
@@ -129,10 +128,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/space4"
-        android:layout_toEndOf="@+id/space"
-        android:layout_toLeftOf="@+id/space2"
-        android:layout_toRightOf="@+id/space"
         android:layout_toStartOf="@+id/space2"
+        android:layout_toLeftOf="@+id/space2"
+        android:layout_toEndOf="@+id/space"
+        android:layout_toRightOf="@+id/space"
         android:entries="@array/event_types" />
 
     <TextView
@@ -271,14 +270,16 @@
         android:id="@+id/noteText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/drinkSpinner"
-        android:layout_alignLeft="@+id/drinkSpinner"
-        android:layout_alignRight="@+id/drinkSpinner"
-        android:layout_alignStart="@+id/drinkSpinner"
         android:layout_below="@+id/drinkSpinner"
+        android:layout_alignStart="@+id/drinkSpinner"
+        android:layout_alignLeft="@+id/drinkSpinner"
+        android:layout_alignEnd="@+id/drinkSpinner"
+        android:layout_alignRight="@+id/drinkSpinner"
         android:ems="10"
         android:imeOptions="actionDone"
-        android:inputType="text" />
+        android:inputType="textMultiLine"
+        android:singleLine="false"
+        android:maxLines="4"/>
 
     <TextView
         android:id="@+id/textView"

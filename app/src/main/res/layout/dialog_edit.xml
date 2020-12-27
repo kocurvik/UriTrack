@@ -1,8 +1,8 @@
 <!-- fragment_edit_name.xml -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 <android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -272,7 +272,9 @@
         android:layout_below="@+id/drinkSpinner"
         android:ems="10"
         android:imeOptions="actionDone"
-        android:inputType="text" />
+        android:inputType="textMultiLine"
+        android:singleLine="false"
+        android:maxLines="4" />
 
     <TextView
         android:id="@+id/textView"
