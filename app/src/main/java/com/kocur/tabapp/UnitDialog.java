@@ -1,5 +1,6 @@
 package com.kocur.tabapp;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
@@ -56,7 +57,20 @@ public class UnitDialog extends DialogFragment implements View.OnClickListener {
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.changeButton: {
-                change();
+                final ProgressDialog progressdialog = new ProgressDialog(getContext());
+                progressdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressdialog.setMessage("Please Wait...");
+                progressdialog.setCancelable(false);
+                progressdialog.show();
+
+                Thread mThread = new Thread() {
+                    @Override
+                    public void run() {
+                        change();
+                        progressdialog.dismiss();
+                    }
+                };
+                mThread.start();
                 break;
             }
         }
