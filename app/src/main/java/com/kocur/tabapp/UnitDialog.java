@@ -154,11 +154,6 @@ public class UnitDialog extends DialogFragment implements View.OnClickListener {
         }
     }
 
-
-
-
-
-
     public static float getConversionRate(String oldUnit, String newUnit) {
         if (oldUnit.equals("dcl") && newUnit.equals("ml"))
             return 100.0f;

@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkVolumeUnit(){
         SharedPreferences myPrefs = getSharedPreferences("pref", getApplicationContext().MODE_PRIVATE);
-        volumeString = myPrefs.getString("VolumeUnit", "dcl");
+        volumeString = myPrefs.getString("VolumeUnit", "ml");
     }
 
     @Override
