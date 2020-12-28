@@ -1,9 +1,14 @@
 package com.kocur.tabapp;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.Gravity;
@@ -12,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -20,6 +26,7 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -83,20 +90,54 @@ public class ImportDialog extends DialogFragment implements View.OnClickListener
             return;
         } else {
             Uri returnUri = returnIntent.getData();
+            UnzipTask unzipTask = new UnzipTask(getContext().getApplicationContext(), getActivity(), getContext());
+            unzipTask.execute(returnUri);
+            dismiss();
+        }
+    }
+
+    private class UnzipTask extends AsyncTask<Uri, Void, String> {
+        private final Context context;
+        private final Context mainContext;
+        private final ProgressDialog progressDialog;
+        private final Activity mainActivity;
+
+
+        public UnzipTask(Context mainContext, Activity mainActivity, Context localContext){
+            this.context = localContext;
+            this.mainContext = mainContext;
+            this.mainActivity = mainActivity;
+            
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setMessage("Please Wait...");
+            progressDialog.setCancelable(false);
+        }
+
+        protected void onPreExecute (){
+            progressDialog.show();
+        }
+
+        protected void onPostExecute(String resultString){
+            ((MainActivity) mainActivity).notifyChange("", true);
+            progressDialog.dismiss();
+            Toast toast = Toast.makeText(mainContext, resultString, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+
+        }
+
+        @Override
+        protected String doInBackground(Uri... uris) {
+            Uri returnUri;
             ParcelFileDescriptor mInputPFD;
             try {
-                /*
-                 * Get the content resolver instance for this context, and use it
-                 * to get a ParcelFileDescriptor for the file.
-                 */
-                mInputPFD = getContext().getContentResolver().openFileDescriptor(returnUri, "r");
+                returnUri = uris[0];
+                mInputPFD = context.getContentResolver().openFileDescriptor(returnUri, "r");
             } catch (FileNotFoundException e) {
-                Toast toast = Toast.makeText(getContext(), "File not found!", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-                e.printStackTrace();
+
                 Log.e("MainActivity", "File not found.");
-                return;
+                return "File not found!";
             }
             FileDescriptor fd = mInputPFD.getFileDescriptor();
             try
@@ -105,41 +146,21 @@ public class ImportDialog extends DialogFragment implements View.OnClickListener
                 ZipInputStream zin = new ZipInputStream(fin);
                 ZipEntry ze = null;
 
-                String strUnzipped = "dcl";
-
-                while ((ze = zin.getNextEntry()) != null) {
-                    if (ze.getName().equals("unit")) {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-                        byte[] buffer = new byte[8192];
-                        int len;
-                        while ((len = zin.read(buffer)) != -1) {
-                            baos.write(buffer, 0, len);
-                        }
-                        strUnzipped = baos.toString();
-                    }
-                }
-                zin.close();
+                String strUnzipped = getUnitString(zin);
 
                 float rate = 1.0f;
                 if (strUnzipped.equals(MainActivity.getVolumeString())) {
                     convert = false;
                 } else {
                     if (!convertBox.isChecked()) {
-                        Toast toast = Toast.makeText(getContext(), "Different units detected! Try again with the convert box checked!", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                        return;
+                        return "Different units detected! Try again with the convert box checked!";
                     } else {
-                        Toast toast = Toast.makeText(getContext(), "Different units detected! The imported files will be converted from " + strUnzipped + " to " + MainActivity.getVolumeString() + "!", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
                         rate = UnitDialog.getConversionRate(strUnzipped, MainActivity.getVolumeString());
                         convert = true;
                     }
                 }
 
-                mInputPFD = getContext().getContentResolver().openFileDescriptor(returnUri, "r");
+                mInputPFD = context.getContentResolver().openFileDescriptor(returnUri, "r");
                 fd = mInputPFD.getFileDescriptor();
                 fin = new FileInputStream(fd);
                 zin = new ZipInputStream(fin);
@@ -153,39 +174,7 @@ public class ImportDialog extends DialogFragment implements View.OnClickListener
 
                     if (checkName(ze.getName())) {
                         countGood++;
-                        File tmpFile = File.createTempFile(ze.getName(), "tmp");
-                        FileOutputStream fout = new FileOutputStream(tmpFile);
-
-                        byte[] buffer = new byte[8192];
-                        int len;
-                        while ((len = zin.read(buffer)) != -1) {
-                            fout.write(buffer, 0, len);
-                        }
-                        fout.close();
-
-                        String date = CSVManager.filenameToDate(ze.getName());
-
-                        ArrayList<UriEvent> toImport = CSVManager.readListFromFile(getContext(), tmpFile, date);
-                        if (convert){
-                            for(UriEvent eim : toImport){
-                                eim.convert(rate);
-                            }
-                        }
-
-                        CSVManager manager = new CSVManager(date, getContext());
-
-                        if (!box.isChecked()) {
-                            toImport.addAll(manager.getList());
-                            Collections.sort(toImport, new Comparator<UriEvent>() {
-                                public int compare(UriEvent e1, UriEvent e2) {
-                                    if (e1.getMins() > e2.getMins()) return 1;
-                                    if (e1.getMins() < e2.getMins()) return -1;
-                                    return 0;
-                                }
-                            });
-                        }
-
-                        manager.writeList(toImport);
+                        processOneDay(zin, ze, rate);
                     } else {
                         if (!ze.getName().equals("unit")) {
                             countBad++;
@@ -194,24 +183,80 @@ public class ImportDialog extends DialogFragment implements View.OnClickListener
                     zin.closeEntry();
                 }
                 zin.close();
-                ((MainActivity) getActivity()).notifyChange("", true);
-                Toast toast;
+                String toastString;
                 if (countBad > 0)
-                    toast = Toast.makeText(getContext(), "Imported " + countGood + " log files! "+ countBad + "files from zip not loaded! (Bad filename)", Toast.LENGTH_SHORT);
+                    toastString = "Imported" + countGood + " log files! "+ countBad + "files from zip not loaded! (Bad filename)";
                 else
-                    toast = Toast.makeText(getContext(), "Imported " + countGood + " log files!", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 50);
-                toast.show();
+                    toastString = "Imported " + countGood + " log files!";
+                if (convert)
+                    toastString += " Units Converted!";
+
+                return toastString;
+
             }
             catch(Exception e)
             {
                 Log.e("Decompress", "unzip", e);
-                Toast toast = Toast.makeText(getContext(), "Unzipping failed!", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
+                return "Unzipping failed!";
             }
         }
-        dismiss();
+
+        private void processOneDay(ZipInputStream zin, ZipEntry ze, float rate) throws IOException {
+            File tmpFile = File.createTempFile(ze.getName(), "tmp");
+            FileOutputStream fout = new FileOutputStream(tmpFile);
+
+            byte[] buffer = new byte[8192];
+            int len;
+            while ((len = zin.read(buffer)) != -1) {
+                fout.write(buffer, 0, len);
+            }
+            fout.close();
+
+            String date = CSVManager.filenameToDate(ze.getName());
+
+            ArrayList<UriEvent> toImport = CSVManager.readListFromFile(context, tmpFile, date);
+            if (convert){
+                for(UriEvent eim : toImport){
+                    eim.convert(rate);
+                }
+            }
+
+            CSVManager manager = new CSVManager(date, context);
+
+            if (!box.isChecked()) {
+                toImport.addAll(manager.getList());
+                Collections.sort(toImport, new Comparator<UriEvent>() {
+                    public int compare(UriEvent e1, UriEvent e2) {
+                        if (e1.getMins() > e2.getMins()) return 1;
+                        if (e1.getMins() < e2.getMins()) return -1;
+                        return 0;
+                    }
+                });
+            }
+
+            manager.writeList(toImport);
+        }
+
+        @NonNull
+        private String getUnitString(ZipInputStream zin) throws IOException {
+            ZipEntry ze;
+            String strUnzipped = "dcl";
+
+            while ((ze = zin.getNextEntry()) != null) {
+                if (ze.getName().equals("unit")) {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+                    byte[] buffer = new byte[8192];
+                    int len;
+                    while ((len = zin.read(buffer)) != -1) {
+                        baos.write(buffer, 0, len);
+                    }
+                    strUnzipped = baos.toString();
+                }
+            }
+            zin.close();
+            return strUnzipped;
+        }
     }
 
     private boolean checkName(String name) {
