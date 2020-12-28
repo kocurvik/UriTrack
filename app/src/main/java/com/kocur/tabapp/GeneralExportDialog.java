@@ -1,5 +1,6 @@
 package com.kocur.tabapp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -67,8 +68,23 @@ public abstract class GeneralExportDialog extends DialogFragment implements View
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.exportButton: {
-                performAction();
+
+                final ProgressDialog progressdialog = new ProgressDialog(getContext());
+                progressdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressdialog.setMessage("Please Wait...");
+                progressdialog.setCancelable(false);
+                progressdialog.show();
+
+                Thread mThread = new Thread() {
+                    @Override
+                    public void run() {
+                        performAction();
+                        progressdialog.dismiss();
+                    }
+                };
+                mThread.start();
                 break;
+
             }
             case R.id.fromExportDate:{
                 showDatePickerDialog(fromDate);
