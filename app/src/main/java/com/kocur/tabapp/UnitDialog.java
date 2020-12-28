@@ -1,6 +1,10 @@
 package com.kocur.tabapp;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
@@ -57,20 +61,7 @@ public class UnitDialog extends DialogFragment implements View.OnClickListener {
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.changeButton: {
-                final ProgressDialog progressdialog = new ProgressDialog(getContext());
-                progressdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressdialog.setMessage("Please Wait...");
-                progressdialog.setCancelable(false);
-                progressdialog.show();
-
-                Thread mThread = new Thread() {
-                    @Override
-                    public void run() {
-                        change();
-                        progressdialog.dismiss();
-                    }
-                };
-                mThread.start();
+                change();
                 break;
             }
         }
@@ -79,14 +70,15 @@ public class UnitDialog extends DialogFragment implements View.OnClickListener {
     private void change(){
         String newUnit = this.unitSpinner.getSelectedItem().toString();
         String oldUnit = this.activity.getVolumeString();
-        if (this.checkBox.isChecked() && !oldUnit.equals(newUnit)) {
-            float conversionRate = getConversionRate(oldUnit, newUnit);
-            convert(conversionRate);
+        if (oldUnit.equals(newUnit)) {
             activity.setVolumeString(newUnit);
-            Toast toast = Toast.makeText(getContext(), "Units changed with conversion!", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(getContext(), "The units selected are the same as the old ones!", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
             activity.notifyFragments();
+        } else if (this.checkBox.isChecked() && !oldUnit.equals(newUnit)) {
+            UnitConversionTask unitConversionTask = new UnitConversionTask(getContext().getApplicationContext(), activity, getContext());
+            unitConversionTask.execute(oldUnit, newUnit);
             dismiss();
         } else {
             activity.setVolumeString(newUnit);
@@ -98,26 +90,73 @@ public class UnitDialog extends DialogFragment implements View.OnClickListener {
         }
     }
 
-    private void convert(float rate) {
-        File[] files = getContext().getFilesDir().listFiles();
-        for(File f : files){
-            if (f.isFile() && f.getPath().endsWith(".csv")) {
-                CSVManager manager = new CSVManager(f, getContext());
-                try {
-                    ArrayList<UriEvent> list = manager.getList();
-                    for (UriEvent event : list){
-                        event.convert(rate);
-                    }
-                    manager.writeList(list);
+    private class UnitConversionTask extends AsyncTask<String, Void, String> {
+        private final Context context;
+        private final Context mainContext;
+        private final ProgressDialog progressDialog;
+        private final MainActivity mainActivity;
 
-                } catch (IOException e) {
-                    Toast toast = Toast.makeText(getContext(), "Something went wrong :-(", Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
+        public UnitConversionTask(Context mainContext, MainActivity mainActivity, Context localContext) {
+            this.context = localContext;
+            this.mainContext = mainContext;
+            this.mainActivity = mainActivity;
+
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setMessage("Please Wait...");
+            progressDialog.setCancelable(false);
+        }
+
+        protected void onPreExecute() {
+            progressDialog.show();
+        }
+
+        protected void onPostExecute(String resultString) {
+            mainActivity.notifyFragments();
+            ((MainActivity) mainActivity).notifyChange("", true);
+            progressDialog.dismiss();
+            Toast toast = Toast.makeText(mainContext, resultString, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String oldUnit;
+            String newUnit;
+            try{
+                oldUnit = strings[0];
+                newUnit = strings[1];
+            } catch (Exception e) {
+                return"Something went wrong :-(";
+            }
+
+            float conversionRate = getConversionRate(oldUnit, newUnit);
+            File[] files = mainContext.getFilesDir().listFiles();
+            for(File f : files){
+                if (f.isFile() && f.getPath().endsWith(".csv")) {
+                    CSVManager manager = new CSVManager(f, mainContext);
+                    try {
+                        ArrayList<UriEvent> list = manager.getList();
+                        for (UriEvent event : list){
+                            event.convert(conversionRate);
+                        }
+                        manager.writeList(list);
+
+                    } catch (IOException e) {
+                        return"Something went wrong :-(";
+                    }
                 }
             }
+            mainActivity.setVolumeString(newUnit);
+            return "Units changed with conversion!";
         }
     }
+
+
+
+
 
 
     public static float getConversionRate(String oldUnit, String newUnit) {
