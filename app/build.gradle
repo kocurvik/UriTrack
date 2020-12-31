@@ -24,6 +24,15 @@ android {
     }
 }
 
+allprojects {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://maven.google.com'
+        }
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -37,5 +46,5 @@ dependencies {
 }
 
 dependencies {
-    compile "com.androidplot:androidplot-core:1.5.1"
+    compile "com.androidplot:androidplot-core:${androidplotCoreVersion}"
 }

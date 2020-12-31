@@ -38,7 +38,7 @@
         android:ems="10"
         android:imeOptions="actionDone"
         android:inputType="numberDecimal"
-        android:text="1.0" />
+        android:text="0.0" />
 
     <EditText
         android:id="@+id/editTrackTime"
