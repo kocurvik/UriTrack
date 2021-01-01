@@ -80,7 +80,9 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
 
         // the content
         final RelativeLayout root = new RelativeLayout(getActivity());
-        root.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//        root.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//        root.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        root.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         // creating the fullscreen dialog
         final Dialog dialog = new Dialog(getActivity());
@@ -88,6 +90,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
         dialog.setContentView(root);
 //        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         return dialog;
     }
@@ -249,7 +252,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
                 //EditText volumeText = (EditText) rootView.findViewById(R.id.editTrackVolume);
                 try {
                     Float volume = Float.valueOf(volumeText.getText().toString());
-                    float newvolume = Math.max(volume - (float) 0.5,0f);
+                    float newvolume = Math.max(volume - MainActivity.getVolumeIncrement(),0f);
                     volumeText.setText(String.format(Locale.US, "%.1f",newvolume));
                 } catch (NumberFormatException e) {
                     errorMsg(e);
@@ -263,7 +266,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
                 //EditText volumeText = (EditText) rootView.findViewById(R.id.editTrackVolume);
                 try {
                     Float volume = Float.valueOf(volumeText.getText().toString());
-                    float newvolume = volume + (float) 0.5;
+                    float newvolume = volume + MainActivity.getVolumeIncrement();
                     volumeText.setText(String.format(Locale.US, "%.1f",newvolume));
                 } catch (NumberFormatException e) {
                     errorMsg(e);

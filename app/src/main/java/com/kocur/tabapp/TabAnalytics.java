@@ -1,5 +1,6 @@
 package com.kocur.tabapp;
 
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.provider.ContactsContract;
@@ -120,14 +121,16 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
             }
         });*/
         plot.getLegend().setVisible(false);
+        plot.getGraph().setMarginBottom(100);
         float size = plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).getPaint().getTextSize();
         plot.setRangeStep(StepMode.INCREMENT_BY_PIXELS, size*2);
         //plot.setPlotMargins(0, 0, 0, 0);
 
-        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
+                plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
             @Override
             public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
-                final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+//                final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                final SimpleDateFormat dateFormat = new SimpleDateFormat(MainActivity.getDateFormatString());
                 long date = ((Number) obj).longValue();
                 return toAppendTo.append(dateFormat.format(date));
             }
@@ -199,6 +202,29 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
         }
     }
 
+    public void updateDateTimeFormat(){
+        Log.d("DateFormatChange", "Changind date format to: "+ MainActivity.getDateFormatString());
+
+        selectionText.setText(" ");
+
+        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
+            @Override
+            public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
+//                final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                final SimpleDateFormat dateFormat = new SimpleDateFormat(MainActivity.getDateFormatString());
+                long date = ((Number) obj).longValue();
+                return toAppendTo.append(dateFormat.format(date));
+            }
+            @Override
+            public Object parseObject(String source, ParsePosition pos) {
+                return null;
+            }
+        });
+//        fromDate.updateDateFormat();
+//        toDate.updateDateFormat();
+        setGraph();
+    }
+
     /**
      * Refresh the tab
      */
@@ -228,15 +254,21 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
 
         float avg = total/num;
 
-        if(spinner.getSelectedItemPosition() < 4)
+        if(spinner.getSelectedItemPosition() < 5)
             s = String.format(Locale.US, "Total volume: %.02f "+ MainActivity.getVolumeString() +"\r \n" +
                     "Average volume per day: %.02f " + MainActivity.getVolumeString(), total,avg);
         else
-        if(spinner.getSelectedItemPosition() < 8)
+        if(spinner.getSelectedItemPosition() < 10)
             s = String.format(Locale.US, "Total: %.0f \r \n" +
                     "Average per day: %.02f", total,avg);
         else
-        if(spinner.getSelectedItemPosition() > 13)
+        if(spinner.getSelectedItemPosition() >= 10 && spinner.getSelectedItemPosition() <= 17 )
+            if (spinner.getSelectedItemPosition() % 2 == 0)
+                s = String.format(Locale.US, "Average volume per day: %.02f " + MainActivity.getVolumeString(), avg);
+            else
+                s = String.format(Locale.US, "Total average: %.02f", avg);
+        else
+        if(spinner.getSelectedItemPosition() > 17)
             s = String.format(Locale.US, "Average: %.01f %%", avg);
         else
             s = String.format(Locale.US, "Average: %.02f",avg);
@@ -546,7 +578,8 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
             /*Toast toast = Toast.makeText(getContext(), "Value:" + map.get(date).toString(), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();*/
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.US);
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.US);
+            SimpleDateFormat dateFormat = new SimpleDateFormat(MainActivity.getDateFormatString(),Locale.US);
             selectionText.setText(dateFormat.format(date) + " : " + String.format(Locale.US,"%.02f", map.get(date)));
             plot.redraw();
             return true;
@@ -559,6 +592,4 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
     public DateManager getDateManager() {
         return dateManager;
     }
-
-
 }

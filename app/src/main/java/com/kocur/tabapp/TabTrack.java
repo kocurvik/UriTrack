@@ -202,7 +202,7 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
 
                     //String type, String date, String time, float volume, float intensity, String drinkType, String otherDrink, String note
                     UriEvent event = new UriEvent(typeSpinner.getSelectedItem().toString(),
-                            dateText.getText().toString(),timeText.getText().toString(), volume,
+                            dateText.getText().toString(), timeText.getText().toString(), volume,
                             intensity, drinkSpinner.getSelectedItem().toString(),
                             drinkText.getText().toString(), noteText.getText().toString());
 
@@ -298,6 +298,11 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
 
     public void updateUnit() {
         unitText.setText(MainActivity.getVolumeString());
+    }
+
+    public void updateDateTimeFormat() {
+//        this.dateText.updateDateFormat();
+//        this.timeText.updateTimeFormat();
     }
 
     public enum types {Urination, Intake, Leak, Urge, Catheter, Note};

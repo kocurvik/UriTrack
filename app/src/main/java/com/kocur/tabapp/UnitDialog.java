@@ -75,7 +75,6 @@ public class UnitDialog extends DialogFragment implements View.OnClickListener {
             Toast toast = Toast.makeText(getContext(), "The units selected are the same as the old ones!", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
-            activity.notifyFragments();
         } else if (this.checkBox.isChecked() && !oldUnit.equals(newUnit)) {
             UnitConversionTask unitConversionTask = new UnitConversionTask(getContext().getApplicationContext(), activity, getContext());
             unitConversionTask.execute(oldUnit, newUnit);
@@ -85,7 +84,6 @@ public class UnitDialog extends DialogFragment implements View.OnClickListener {
             Toast toast = Toast.makeText(getContext(), "Units changed!", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
-            activity.notifyFragments();
             dismiss();
         }
     }

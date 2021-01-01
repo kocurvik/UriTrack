@@ -263,8 +263,9 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         EditDialog editDialog = new EditDialog();
-        editDialog.show(getFragmentManager(),"editDialog");
         editDialog.setup(logView.getAdapter(), position,this);
+        editDialog.show(getFragmentManager(),"editDialog");
+//        editDialog.setup(logView.getAdapter(), position,this);
     }
 
     /**
@@ -299,5 +300,10 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
             ((LogAdapter) logView.getAdapter()).change(position,event);
             ((MainActivity) getActivity()).notifyChange(dateText,true);
         }
+    }
+
+    public void updateDateTimeFormat() {
+//        dateText.updateDateFormat();
+        populate();
     }
 }

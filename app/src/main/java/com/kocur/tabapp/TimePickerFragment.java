@@ -2,11 +2,15 @@ package com.kocur.tabapp;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
+import android.util.Log;
+import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -32,11 +36,28 @@ public class TimePickerFragment extends DialogFragment
                 //DateFormat.is24HourFormat(getActivity()));
     }
 
+    public void onConfigurationChanged(Configuration configuration) {
+        super.onConfigurationChanged(configuration);
+        Log.d("Orientation", "Changed orientation recreating TimePickerFragment!");
+        TimePickerFragment newFragment = new TimePickerFragment();
+        newFragment.setEditText(editText);
+
+        newFragment.show(getFragmentManager(), "datePicker");
+        dismiss();
+    }
+
     public void setEditText(EditText editText) {
         this.editText = editText;
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        if (editText == null) {
+            Toast toast = Toast.makeText(getContext(), "Something went wrong!", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            dismiss();
+            return;
+        }
         editText.setText(String.format(Locale.US,"%02d",hourOfDay) + ":" + String.format(Locale.US,"%02d",minute));
     }
 }
