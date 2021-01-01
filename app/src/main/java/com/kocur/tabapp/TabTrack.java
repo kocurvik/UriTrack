@@ -37,7 +37,7 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
     private Button minusButtonIntensity;
     private Button plusButtonVolume;
     private Button minusButtonVolume;
-    private EditText dateText;
+    private DateEditText dateText;
     private EditText timeText;
     private EditText volumeText;
     private EditText drinkText;
@@ -86,8 +86,8 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
         this.unitText =  (TextView) rootView.findViewById(R.id.textVolume2);
         unitText.setText(MainActivity.getVolumeString());
 
-        this.dateText = (EditText) rootView.findViewById(R.id.editTrackDate);
-        dateText.setText(dateFormat.format(date));
+        this.dateText = (DateEditText) rootView.findViewById(R.id.editTrackDate);
+        dateText.setDate(date);
         dateText.setOnClickListener(this);
         this.timeText = (EditText) rootView.findViewById(R.id.editTrackTime);
         timeText.setText(timeFormat.format(date));
@@ -134,7 +134,7 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
         addButton.setOnClickListener(this);
 
         //EditText dateText = (EditText) rootView.findViewById(R.id.editTrackDate);
-        this.dateText.setText(dateFormat.format(date));
+        this.dateText.setDate(date);
         //EditText timeText = (EditText) rootView.findViewById(R.id.editTrackTime);
         this.timeText.setText(timeFormat.format(date));
         Log.d("MyApp", "resume");
@@ -173,7 +173,7 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
                 });
     }
 
-    public void showDatePickerDialog(EditText dateText) {
+    public void showDatePickerDialog(DateEditText dateText) {
         DatePickerFragment newFragment = new DatePickerFragment();
         newFragment.setEditText(dateText);
         newFragment.show(getFragmentManager(), "datePicker");
@@ -202,17 +202,17 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
 
                     //String type, String date, String time, float volume, float intensity, String drinkType, String otherDrink, String note
                     UriEvent event = new UriEvent(typeSpinner.getSelectedItem().toString(),
-                            dateText.getText().toString(), timeText.getText().toString(), volume,
+                            dateText.getDate(), timeText.getText().toString(), volume,
                             intensity, drinkSpinner.getSelectedItem().toString(),
                             drinkText.getText().toString(), noteText.getText().toString());
 
-                    CSVManager manager = new CSVManager(dateText.getText().toString(),getContext());
+                    CSVManager manager = new CSVManager(dateText.getDate(),getContext());
 
                     manager.add(event);
 
                     this.noteText.setText("");
 
-                    ((MainActivity) getActivity()).notifyChange(event.getDate(), true);
+                    ((MainActivity) getActivity()).notifyChange(dateText.getDate(), true);
 
                     Toast toast = Toast.makeText(getContext(),"Event added!",Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER,0,0);
@@ -301,7 +301,7 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
     }
 
     public void updateDateTimeFormat() {
-//        this.dateText.updateDateFormat();
+        this.dateText.updateDateFormat();
 //        this.timeText.updateTimeFormat();
     }
 

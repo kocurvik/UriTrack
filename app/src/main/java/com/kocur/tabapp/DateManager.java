@@ -27,9 +27,9 @@ import static com.kocur.tabapp.R.id.toDate;
 public class DateManager {
     private final Context context;
     private final SimpleDateFormat dateFormat;
-    private EditText fromDate, toDate;
+    private DateEditText fromDate, toDate;
 
-    public DateManager(Context context, EditText fromDate, EditText toDate){
+    public DateManager(Context context, DateEditText fromDate, DateEditText toDate){
         this.context = context;
         this.fromDate = fromDate;
         this.toDate = toDate;
@@ -43,75 +43,17 @@ public class DateManager {
      */
     public void setDate(int i, int type) {
         long date = System.currentTimeMillis();
-        toDate.setText(dateFormat.format(date));
+        toDate.setDate(date);
+
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(date);
-        toDate.setText(dateFormat.format(date));
         cal.add(type, i);
-        fromDate.setText(dateFormat.format(cal.getTimeInMillis()));
+        fromDate.setDate(cal.getTimeInMillis());
     }
 
-    /*public void setAllTime() {
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        final SimpleDateFormat fileDateFormat = new SimpleDateFormat("dd_MM_yyyy");
-        long date = System.currentTimeMillis();
-        toDate.setText(dateFormat.format(date));
-
-        FilenameFilter textFilter = new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                String lowercaseName = name.toLowerCase();
-                if (lowercaseName.endsWith(".csv")) {
-                    String justDate = lowercaseName.split("\\.")[0];
-                    try {
-                        fileDateFormat.parse(justDate);
-                        return true;
-                    } catch (Exception e){
-                    }
-                }
-                return false;
-            }
-        };
-        String[] list = getContext().getFilesDir().list(textFilter);
-        long newdate = date;
-        for (String s : list) {
-            try {
-                newdate = fileDateFormat.parse(s).getTime();
-                if (newdate < date)
-                    date = newdate;
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        toDate.setText(dateFormat.format(date));
-
-        if (toDate.getText().toString().equals(dateFormat.format(date))){
-
-        } else {
-            fromDate.setText(dateFormat.format(date));
-            setMap();
-            refresh();
-        }
-
-    }*/
-
-    /**
-     * @return Wheter to is after from
-     */
     public boolean dateOk() {
-        Date from = null;
-        Date to = null;
-        try {
-            from = dateFormat.parse(fromDate.getText().toString());
-            to = dateFormat.parse(toDate.getText().toString());
-        } catch (ParseException e) {
-            Toast toast = Toast.makeText(context,"Wrong Date!",Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER,0,0);
-            toast.show();
-            e.printStackTrace();
-            return false;
-        }
-
+        Date from = fromDate.getDate();
+        Date to = toDate.getDate();
 
         Calendar start = Calendar.getInstance();
         start.setTime(from);
@@ -131,10 +73,10 @@ public class DateManager {
      * @return List of dates in selected date range
      * @throws ParseException
      */
-    public LinkedList<Date> getDates() throws ParseException {
+    public LinkedList<Date> getDates() {
         LinkedList<Date> list = new LinkedList<Date>();
-        Date from = dateFormat.parse(fromDate.getText().toString());
-        Date to = dateFormat.parse(toDate.getText().toString());
+        Date from = fromDate.getDate();
+        Date to = toDate.getDate();
 
         Calendar start = Calendar.getInstance();
         start.setTime(from);
@@ -169,9 +111,5 @@ public class DateManager {
             list.add(dateFormat.format(d));
         }
         return list;
-    }
-
-    public void setDateInit() {
-        //TODO: add lifetime init
     }
 }

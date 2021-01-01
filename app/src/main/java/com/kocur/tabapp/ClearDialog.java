@@ -20,7 +20,7 @@ import java.util.LinkedList;
  */
 
 public class ClearDialog extends DialogFragment implements View.OnClickListener {
-    private EditText fromDate, toDate;
+    private DateEditText fromDate, toDate;
     private Button exportButton;
     private DateManager dateManager;
     private EditText confirmText;
@@ -38,20 +38,20 @@ public class ClearDialog extends DialogFragment implements View.OnClickListener 
 
         this.exportButton = (Button) rootView.findViewById(R.id.exportButton);
         exportButton.setOnClickListener(this);
-        this.fromDate = (EditText) rootView.findViewById(R.id.fromExportDate);
+        this.fromDate = (DateEditText) rootView.findViewById(R.id.fromExportDate);
         fromDate.setOnClickListener(this);
-        this.toDate = (EditText) rootView.findViewById(R.id.toExportDate);
+        this.toDate = (DateEditText) rootView.findViewById(R.id.toExportDate);
         toDate.setOnClickListener(this);
         this.confirmText = (EditText) rootView.findViewById(R.id.confirmText);
         this.confirmText.setText("");
 
-        this.dateManager = new DateManager(getContext(),fromDate,toDate);
+        this.dateManager = new DateManager(getContext(), fromDate, toDate);
         dateManager.setDate(-7, Calendar.DATE);
 
         return rootView;
     }
 
-    public void showDatePickerDialog(EditText dateText) {
+    public void showDatePickerDialog(DateEditText dateText) {
         DatePickerFragment newFragment = new DatePickerFragment();
         newFragment.setEditText(dateText);
         newFragment.show(getFragmentManager(), "datePicker");
@@ -77,22 +77,24 @@ public class ClearDialog extends DialogFragment implements View.OnClickListener 
 
     private void clear(){
         if (confirmText.getText().toString().equals("yes")){
-            try {
-                LinkedList<String> list = dateManager.getFilenames();
-                for(String s : list){
-                    File dir = getContext().getFilesDir();
-                    File file = new File(dir, s);
-                    file.delete();
-                    String newdate = s.split("\\.")[0].replace('_','/');
+            if (dateManager.dateOk()) {
+                try {
+                    LinkedList<String> list = dateManager.getFilenames();
+                    for (String s : list) {
+                        File dir = getContext().getFilesDir();
+                        File file = new File(dir, s);
+                        file.delete();
+                        String newdate = s.split("\\.")[0].replace('_', '/');
+                    }
+                    ((MainActivity) getActivity()).notifyChange("", true);
+                    Toast toast = Toast.makeText(getContext(), "Files deleted!", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                } catch (ParseException e) {
+                    Toast toast = Toast.makeText(getContext(), "Something went wrong!", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
                 }
-                ((MainActivity) getActivity()).notifyChange("", true);
-                Toast toast = Toast.makeText(getContext(), "Files deleted!", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-            } catch (ParseException e) {
-                Toast toast = Toast.makeText(getContext(), "Something went wrong!", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
             }
         } else {
             Toast toast = Toast.makeText(getContext(), "Type lowercase \"yes\" into the confirmation box to clear the data!", Toast.LENGTH_SHORT);

@@ -12,7 +12,7 @@
     android:layout_height="wrap_content"
     android:background="@color/ap_white">
 
-    <EditText
+    <com.kocur.tabapp.DateEditText
         android:id="@+id/editTrackDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

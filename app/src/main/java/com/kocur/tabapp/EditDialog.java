@@ -28,7 +28,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -47,7 +49,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
     private Button minusButtonIntensity;
     private Button plusButtonVolume;
     private Button minusButtonVolume;
-    private EditText dateText;
+    private DateEditText dateText;
     private EditText timeText;
     private EditText volumeText;
     private EditText drinkText;
@@ -121,8 +123,18 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
 
         ((TextView) rootView.findViewById(R.id.textVolume2)).setText(MainActivity.getVolumeString());
 
-        this.dateText = (EditText) rootView.findViewById(R.id.editTrackDate);
-        dateText.setText(event.getDate());
+
+        this.dateText = (DateEditText) rootView.findViewById(R.id.editTrackDate);
+        try {
+            Date date = MainActivity.getDefaultDateFormat().parse(event.getDate());
+            dateText.setDate(date);
+        } catch (ParseException e) {
+            Toast toast = Toast.makeText(getContext(), "Something went wrong with reading date!", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            dismiss();
+            e.printStackTrace();
+        }
         dateText.setOnClickListener(this);
         this.timeText = (EditText) rootView.findViewById(R.id.editTrackTime);
         timeText.setText(event.getTime());
@@ -169,7 +181,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
         this.tabLog = tabLog;
     }
 
-    public void showDatePickerDialog(EditText dateText) {
+    public void showDatePickerDialog(DateEditText dateText) {
         DatePickerFragment newFragment = new DatePickerFragment();
         newFragment.setEditText(dateText);
         newFragment.show(getFragmentManager(), "datePicker");
@@ -233,10 +245,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
                             intensity, drinkSpinner.getSelectedItem().toString(),
                             drinkText.getText().toString(), noteText.getText().toString());
 
-                    //adapter.change(position,dateText.getText().toString(),event);
-                    tabLog.change(position,dateText.getText().toString(),event);
-                    //((MainActivity) getActivity()).notifyChange(dateText.getText().toString(), false);
-
+                    tabLog.change(position, dateText.getDate(),event);
                     dismiss();
 
                 } catch (IOException | NumberFormatException e) {
@@ -303,8 +312,6 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
             }
 
             case R.id.editTrackDate: {
-                //Log.d("I","editTrackDate");
-                //EditText dateText = (EditText) rootView.findViewById(R.id.editTrackDate);
                 this.showDatePickerDialog(dateText);
                 break;
             }
@@ -318,7 +325,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
             case R.id.deleteButton:{
                 try {
                     adapter.remove(position);
-                    ((MainActivity) getActivity()).notifyChange(dateText.getText().toString(), true);
+                    ((MainActivity) getActivity()).notifyChange(MainActivity.getDefaultDateFormat().format(dateText.getDate()), true);
                     this.dismiss();
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -1,0 +1,89 @@
+<!-- fragment_edit_name.xml -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout5"
+            android:layout_below="@+id/linearLayout4"
+            android:layout_centerHorizontal="true">
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/changeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirm"
+            android:layout_below="@+id/space18"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/dialogInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="Here you can change the date and time formats." />
+
+        <Spinner
+            android:id="@+id/timeSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/space14"
+            android:layout_centerHorizontal="true"
+            android:entries="@array/time_formats" />
+
+        <Space
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/space14"
+            android:layout_below="@+id/dialogInfo"
+            android:layout_centerHorizontal="true" />
+
+        <Space
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/space16"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/timeSpinner"/>
+
+        <Spinner
+            android:id="@+id/dateSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/space16"
+            android:layout_centerHorizontal="true"
+            android:entries="@array/date_formats" />
+
+        <Space
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/space17"
+            android:layout_below="@+id/convertCheckBox"
+            android:layout_alignLeft="@+id/space16"
+            android:layout_alignStart="@+id/space16" />
+
+        <Space
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/dateSpinner"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/space18" />
+
+    </android.widget.RelativeLayout>
+</ScrollView>

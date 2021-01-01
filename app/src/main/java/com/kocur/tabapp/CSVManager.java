@@ -2,23 +2,21 @@ package com.kocur.tabapp;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.ViewGroup;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by kocur on 7/22/2017.
@@ -26,29 +24,48 @@ import java.util.List;
 
 public class CSVManager {
     private String filename;
-    private String date;
+    private String dateString;
     private Context context;
+    private Date date;
 
     /**
      * Constructs manager that handles IO for a spcefic date
-     * @param date Date to be logged/read
+     * @param dateString Date to be logged/read
      * @param context Parent context
      */
-    public CSVManager(String date, Context context) {
-        this.date = date;
-        String newdate = date.replace('/','_');
-        Log.d("I",context.getFilesDir() + "/" + newdate + ".csv");
+    public CSVManager(String dateString, Context context) {
         this.context = context;
-        //this.filename = context.getFilesDir() + "/" + newdate + ".csv";
+        this.dateString = dateString;
+        String newdate = dateString.replace('/','_');
+        Log.d("I",context.getFilesDir() + "/" + newdate + ".csv");
+
         this.filename = newdate + ".csv";
     }
 
-    public CSVManager(File f, Context context) {
+    public CSVManager(Date date, Context context){
+        this.date = date;
+        this.context = context;
+
+        this.dateString = MainActivity.getDefaultDateFormat().format(date);
+
+        String filenameDateString = new SimpleDateFormat("dd_MM_yyyy", Locale.US).format(date);
+        this.filename = filenameDateString + ".csv";
+
+        Log.d("I",context.getFilesDir() + "/" + filenameDateString + ".csv");
+    }
+
+    public CSVManager(File f, Context context) throws ParseException {
         this.filename = f.getName();
         int pos = filename.lastIndexOf(".");
-        this.date = filename.substring(0, pos).replace('_','/');
+
+        dateString = filename.substring(0, pos).replace('_','/');
+        SimpleDateFormat sdf = new SimpleDateFormat("dd_MM_yyyy", Locale.US);
+        date = sdf.parse(filename.substring(0, pos));
+
         this.context = context;
     }
+
+    public Date getDate() {return date;}
 
     public static String filenameToDate (String filename){
         int pos = filename.lastIndexOf(".");
@@ -118,7 +135,7 @@ public class CSVManager {
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line = reader.readLine();
             while(line != null){
-                list.add(new UriEvent(line,this.date));
+                list.add(new UriEvent(line, this.dateString));
                 line = reader.readLine();
             }
             return list;

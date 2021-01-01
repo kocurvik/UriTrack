@@ -58,9 +58,7 @@ public class PDFDialog extends GeneralExportDialog {
             FileOutputStream out = new FileOutputStream(outputFile);
             PdfWriter.getInstance(document, out);
             document.open();
-            //ArrayList<PdfPTable> tableList = generateTableList();
-            ArrayList<ArrayList<UriEvent>> eventList = generateEventListList();
-            writeDocument(document,eventList);
+            writeDocument(document, generateEventListList());
             document.close();
             out.close();
             sendIntent(outputFile);
@@ -70,7 +68,7 @@ public class PDFDialog extends GeneralExportDialog {
         }
     }
 
-    private void writeDocument(Document document, ArrayList<ArrayList<UriEvent>> superList) throws Exception {
+    private void writeDocument(Document document, ArrayList<CSVManager> superList) throws Exception {
         PdfPTable table = null;
         int remaining = 0;
         int listr = 0;
@@ -88,7 +86,8 @@ public class PDFDialog extends GeneralExportDialog {
         topPar.setPaddingTop(38);
         topPar.setAlignment(Element.ALIGN_CENTER);
 
-        for (ArrayList<UriEvent> subList : superList) {
+        for (CSVManager manager : superList) {
+            ArrayList<UriEvent> subList = manager.getList();
             listr = subList.size();
             Boolean spandone = false;
             while (listr > 0) {
@@ -106,7 +105,7 @@ public class PDFDialog extends GeneralExportDialog {
 
 
                 if (!spandone) {
-                    cell = new PdfPCell(new Phrase(subList.get(0).getDate()));
+                    cell = new PdfPCell(new Phrase(MainActivity.getDateFormat().format(manager.getDate())));
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     cell.setVerticalAlignment(Element.ALIGN_CENTER);
                     cell.setRowspan(Math.min(listr, remaining));
@@ -181,14 +180,13 @@ public class PDFDialog extends GeneralExportDialog {
         }
     }
 
-    private ArrayList<ArrayList<UriEvent>> generateEventListList() throws ParseException, IOException {
-        LinkedList<String> dateList = dateManager.getDateStrings();
-        ArrayList<ArrayList<UriEvent>> superList = new ArrayList<ArrayList<UriEvent>>();
-        for (String s : dateList){
+    private ArrayList<CSVManager> generateEventListList() throws ParseException, IOException {
+        LinkedList<Date> dateList = dateManager.getDates();
+        ArrayList<CSVManager> superList = new ArrayList<CSVManager>();
+        for (Date date: dateList){
             ArrayList<UriEvent> subList = new ArrayList<UriEvent>();
-            CSVManager manager = new CSVManager(s,getContext());
-            subList.addAll(manager.getList());
-            superList.add(subList);
+            CSVManager manager = new CSVManager(date, getContext());
+            superList.add(manager);
         }
         return superList;
     }
@@ -200,18 +198,18 @@ public class PDFDialog extends GeneralExportDialog {
         table.setHorizontalAlignment(Element.ALIGN_CENTER);
 
 //        table.setWidthPercentage(90);
-        table.setTotalWidth(new float[]{ 76, 44, 76, 56, 50, 76, 162});
+        table.setTotalWidth(new float[]{ 100, 54, 76, 56, 50, 76, 140});
         table.setLockedWidth(true);
         table.setHeaderRows(1);
 
         Font f = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10);
 
-        PdfPCell cell = new PdfPCell(new Phrase("Date \r\n DD/MM/YYYY", f));
+        PdfPCell cell = new PdfPCell(new Phrase("Date \r\n" + MainActivity.getDateFormatString(), f));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setVerticalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
 
-        cell = new PdfPCell(new Phrase("Time \r\n HH:MM", f));
+        cell = new PdfPCell(new Phrase("Time \r\n" + MainActivity.getTimeFormatString(), f));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setVerticalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);

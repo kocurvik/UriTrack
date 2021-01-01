@@ -2,8 +2,6 @@ package com.kocur.tabapp;
 
 
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.os.StrictMode;
 import android.support.design.widget.TabLayout;
 
 
@@ -20,6 +18,9 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -30,11 +31,15 @@ public class MainActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private static String volumeString;
+    private static String volumeString, dateFormatString, timeFormatString;
 
     public static String getVolumeString(){
         return volumeString;
     }
+
+    public static SimpleDateFormat getDefaultDateFormat() {return new SimpleDateFormat("dd/MM/yyyy", Locale.US);}
+
+    public static SimpleDateFormat getDateFormat() { return new SimpleDateFormat(getDateFormatString());}
 
     public void setVolumeString(String newUnit){
         SharedPreferences myPrefs = getSharedPreferences("pref", getApplicationContext().MODE_PRIVATE);
@@ -42,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("VolumeUnit", newUnit);
         editor.apply();
         volumeString = newUnit;
+        notifyFragments();
     }
 
     private void checkVolumeUnit(){
@@ -49,16 +55,35 @@ public class MainActivity extends AppCompatActivity {
         volumeString = myPrefs.getString("VolumeUnit", "ml");
     }
 
+    public static String getDateFormatString() {return dateFormatString;}
+    public static String getTimeFormatString() {return timeFormatString;}
+
+    private void checkDateTimeFormatString(){
+        SharedPreferences myPrefs = getSharedPreferences("pref", getApplicationContext().MODE_PRIVATE);
+        dateFormatString = myPrefs.getString("DateFormatString", "dd/MM/yyyy");
+        timeFormatString = myPrefs.getString("TimeFormatString", "HH:MM");
+    }
+
+    public void setDateTimeFormatString(String newDateFormat, String newTimeFormat){
+        SharedPreferences myPrefs = getSharedPreferences("pref", getApplicationContext().MODE_PRIVATE);
+        SharedPreferences.Editor editor = myPrefs.edit();
+        editor.putString("DateFormatString", newDateFormat);
+        editor.putString("TimeFormatString", newTimeFormat);
+        editor.apply();
+        dateFormatString = newDateFormat;
+        timeFormatString = newTimeFormat;
+        notifyDateTimeFormatChange();
+    }
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkVolumeUnit();
-
-        /*StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                .detectAll()
-                .penaltyLog()
-                .build();
-        StrictMode.setThreadPolicy(policy);*/
+        checkDateTimeFormatString();
 
         setContentView(R.layout.activity_main);
 
@@ -119,6 +144,15 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.changedatetimeformat) {
+            /*Toast toast = Toast.makeText(getBaseContext(),"Not implemented yet!",Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();+*/
+            DateTimeFormatDialog dateTimeFormatDialog = new DateTimeFormatDialog();
+            dateTimeFormatDialog.show(getSupportFragmentManager(),"changeDialog");
+            dateTimeFormatDialog.setActivity(this);
+            return true;
+        }
 
         if (id == R.id.exportPDF) {
             /*Toast toast = Toast.makeText(getBaseContext(),"Not implemented yet!",Toast.LENGTH_SHORT);
@@ -196,8 +230,18 @@ public class MainActivity extends AppCompatActivity {
         ((SectionsPagerAdapter) this.mViewPager.getAdapter()).notifyChange(s,log);
     }
 
+    public void notifyChange(Date date, boolean log) {
+        String s = getDefaultDateFormat().format(date);
+        ((SectionsPagerAdapter) this.mViewPager.getAdapter()).notifyChange(s,log);
+    }
+
+
     public void notifyFragments(){
         ((SectionsPagerAdapter) this.mViewPager.getAdapter()).notifyFragments();
+    }
+
+    public void notifyDateTimeFormatChange(){
+        ((SectionsPagerAdapter) this.mViewPager.getAdapter()).notifyDateTimeFormatChange();
     }
 
     public static Float getVolumeIncrement() {
@@ -312,5 +356,15 @@ public class MainActivity extends AppCompatActivity {
             if (tabTrack != null)
                 tabTrack.updateUnit();
         }
+
+        public void notifyDateTimeFormatChange(){
+            if (tabAnalytics!=null)
+                tabAnalytics.updateDateTimeFormat();
+            if (tabLog != null)
+                tabLog.updateDateTimeFormat();
+            if (tabTrack != null)
+                tabTrack.updateDateTimeFormat();
+        }
+
     }
 }

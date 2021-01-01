@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 /**
@@ -22,7 +24,7 @@ import java.util.Locale;
 
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
-    private EditText editText;
+    private DateEditText editText;
     private TabLog tabLog;
     private TabAnalytics tabAnalytics;
 
@@ -52,7 +54,7 @@ public class DatePickerFragment extends DialogFragment
         dismiss();
     }
 
-    public void setEditText(EditText editText){
+    public void setEditText(DateEditText editText){
         this.editText = editText;
     }
 
@@ -72,8 +74,12 @@ public class DatePickerFragment extends DialogFragment
             dismiss();
             return;
         }
-        String oldtext = editText.getText().toString();
-        editText.setText(String.format(Locale.US,"%02d",day) + "/" + String.format(Locale.US, "%02d",month+1) + "/" + String.format(Locale.US, "%04d",year));
+//        String oldtext = editText.getText().toString();
+//        editText.setText(String.format(Locale.US,"%02d",day) + "/" + String.format(Locale.US, "%02d",month+1) + "/" + String.format(Locale.US, "%04d",year));
+//        Date olddate = editText.getDate();
+        Date date = new GregorianCalendar(year, month, day).getTime();
+        editText.setDate(date);
+
         if (tabLog != null){
             tabLog.populate();
         }
@@ -82,8 +88,6 @@ public class DatePickerFragment extends DialogFragment
             if (tabAnalytics.getDateManager().dateOk()) {
                 tabAnalytics.setMap();
                 tabAnalytics.refresh();
-            } else {
-                editText.setText(oldtext);
             }
         }
     }

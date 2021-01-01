@@ -31,7 +31,7 @@ import java.util.Locale;
 
 public class TabLog extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-    private EditText dateText;
+    private DateEditText dateText;
     private ListView logView;
     private ImageView toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic, toggleNotePic;
     private TextView ioTextView;
@@ -41,10 +41,10 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_log, container, false);
 
-        dateText = (EditText) rootView.findViewById(R.id.logDate);
+        dateText = (DateEditText) rootView.findViewById(R.id.logDate);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         long date = System.currentTimeMillis();
-        dateText.setText(dateFormat.format(date));
+        dateText.setDate(date);
         dateText.setOnClickListener(this);
 
         Button increaseButton = (Button) rootView.findViewById(R.id.buttonLogIncrease);
@@ -88,7 +88,7 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
      * @param date Date that has been updated elsewhere
      */
     public void populate(String date) {
-        if (dateText.getText().toString().equals(date) || date.equals("")){
+        if (MainActivity.getDefaultDateFormat().format(dateText.getDate()).equals(date) || date.equals("")){
             populate();
         }
     }
@@ -97,7 +97,7 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
      * Refresh listview
      */
     public void populate() {
-        CSVManager manager = new CSVManager(dateText.getText().toString(),getContext());
+        CSVManager manager = new CSVManager(dateText.getDate(),getContext());
         //ArrayList<String> stringList = new ArrayList<String>();
         try {
             ArrayList<UriEvent> list = manager.getList();
@@ -127,7 +127,7 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
         }
     }
 
-    private void showDatePickerDialog(EditText dateText) {
+    private void showDatePickerDialog(DateEditText dateText) {
         DatePickerFragment newFragment = new DatePickerFragment();
         newFragment.setEditText(dateText);
         newFragment.setTabLog(this);
@@ -147,35 +147,21 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
                 break;
             }
             case R.id.buttonLogIncrease: {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.US);
-                Date date = null;
-                try {
-                    date = dateFormat.parse(dateText.getText().toString());
-                    Calendar calendar = GregorianCalendar.getInstance();
-                    calendar.setTime(date);
-                    calendar.add(Calendar.DATE, 1);
-                    date = calendar.getTime();
-                    dateText.setText(dateFormat.format(date));
-                    this.populate();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                Calendar calendar = GregorianCalendar.getInstance();
+                calendar.setTime(dateText.getDate());
+                calendar.add(Calendar.DATE, 1);
+                Date date = calendar.getTime();
+                dateText.setDate(date);
+                this.populate();
                 break;
             }
             case R.id.buttonLogDecrease: {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-                Date date = null;
-                try {
-                    date = dateFormat.parse(dateText.getText().toString());
-                    Calendar calendar = GregorianCalendar.getInstance();
-                    calendar.setTime(date);
-                    calendar.add(Calendar.DATE, -1);
-                    date = calendar.getTime();
-                    dateText.setText(dateFormat.format(date));
-                    this.populate();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                Calendar calendar = GregorianCalendar.getInstance();
+                calendar.setTime(dateText.getDate());
+                calendar.add(Calendar.DATE, -1);
+                Date date = calendar.getTime();
+                dateText.setDate(date);
+                this.populate();
                 break;
             }
             case R.id.toggleUrinationPic:{
@@ -271,17 +257,16 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
     /**
      * Make changes to logs when an event is edited
      * @param position Position of old event in Listview
-     * @param dateText String with new date
+     * @param date New date
      * @param event New event
      * @throws IOException
      */
-    public void change(int position, String dateText, UriEvent event) throws IOException {
-        if (!this.dateText.getText().toString().equals(dateText)){
+    public void change(int position, Date date, UriEvent event) throws IOException {
+        if (!this.dateText.getDate().equals(date)){
             ((LogAdapter) this.logView.getAdapter()).remove(position);
-            //((MainActivity) getActivity()).notifyChange(this.dateText.getText().toString(),false);
             ((MainActivity) getActivity()).notifyChange(this.dateText.getText().toString(),true);
-            this.dateText.setText(dateText);
-            CSVManager manager = new CSVManager(dateText,getContext());
+            this.dateText.setDate(date);
+            CSVManager manager = new CSVManager(date, getContext());
             manager.add(event);
             ArrayList<UriEvent> list = manager.getList();
             Collections.sort(list, new Comparator<UriEvent>() {
@@ -291,19 +276,18 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
                     return 0;
                 }});
             manager.writeList(list);
-            //Log.d("I","list loaded");
             LogAdapter adapter = new LogAdapter(getContext(), list,this,manager);
             adapter.setup(toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic, toggleNotePic);
             logView.setAdapter(adapter);
-            ((MainActivity) getActivity()).notifyChange(dateText,true);
+            ((MainActivity) getActivity()).notifyChange(date,true);
         } else {
             ((LogAdapter) logView.getAdapter()).change(position,event);
-            ((MainActivity) getActivity()).notifyChange(dateText,true);
+            ((MainActivity) getActivity()).notifyChange(date,true);
         }
     }
 
     public void updateDateTimeFormat() {
-//        dateText.updateDateFormat();
+        dateText.updateDateFormat();
         populate();
     }
 }

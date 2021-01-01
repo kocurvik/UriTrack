@@ -67,7 +67,7 @@ import java.util.Objects;
 public class TabAnalytics extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener, View.OnTouchListener {
 
 
-    private EditText fromDate,toDate;
+    private DateEditText fromDate,toDate;
     private LineAndPointFormatter lineFormat,selectionFormat;
     private XYPlot plot;
     private HashMap<Date,Float> map;
@@ -94,13 +94,13 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
         this.spinner = (Spinner) rootView.findViewById(R.id.analyticsSpinner);
         this.spinner.setOnItemSelectedListener(this);
 
-        this.fromDate = (EditText) rootView.findViewById(R.id.fromDate);
+        this.fromDate = (DateEditText) rootView.findViewById(R.id.fromDate);
         fromDate.setOnClickListener(this);
 
-        this.toDate = (EditText) rootView.findViewById(R.id.toDate);
+        this.toDate = (DateEditText) rootView.findViewById(R.id.toDate);
         toDate.setOnClickListener(this);
 
-        this.dateManager = new DateManager(getContext(),fromDate,toDate);
+        this.dateManager = new DateManager(getContext(), fromDate, toDate);
 
 
         rootView.findViewById(R.id.analytics7days).setOnClickListener(this);
@@ -159,7 +159,7 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
         return rootView;
     }
 
-    public void showDatePickerDialog(EditText dateText) {
+    public void showDatePickerDialog(DateEditText dateText) {
         DatePickerFragment newFragment = new DatePickerFragment();
         newFragment.setEditText(dateText);
         newFragment.setTabAnalytics(this);
@@ -203,6 +203,9 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
     }
 
     public void updateDateTimeFormat(){
+        toDate.updateDateFormat();
+        fromDate.updateDateFormat();
+
         Log.d("DateFormatChange", "Changind date format to: "+ MainActivity.getDateFormatString());
 
         selectionText.setText(" ");
@@ -211,7 +214,7 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
             @Override
             public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
 //                final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                final SimpleDateFormat dateFormat = new SimpleDateFormat(MainActivity.getDateFormatString());
+                final SimpleDateFormat dateFormat = MainActivity.getDateFormat();
                 long date = ((Number) obj).longValue();
                 return toAppendTo.append(dateFormat.format(date));
             }
@@ -240,12 +243,7 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
         String s = " ";
         float total = 0;
         int num = 0;
-        LinkedList<Date> list = null;
-        try {
-            list = dateManager.getDates();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        LinkedList<Date> list = dateManager.getDates();
 
         for (Date d : list) {
             total += map.get(d);
@@ -280,15 +278,8 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
      * Set graph
      */
     private void setGraph(){
-
         selectionText.setText("");
-
-        LinkedList<Date> list = null;
-        try {
-            list = dateManager.getDates();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        LinkedList<Date> list = dateManager.getDates();
 
         float max = 0;
 
@@ -341,12 +332,7 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
      * Set the map
      */
     public void setMap() {
-        LinkedList<Date> list = null;
-        try {
-            list = dateManager.getDates();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        LinkedList<Date> list = dateManager.getDates();
         map.clear();
         for (Date d : list){
             setStats(d);
@@ -579,8 +565,7 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();*/
 //            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.US);
-            SimpleDateFormat dateFormat = new SimpleDateFormat(MainActivity.getDateFormatString(),Locale.US);
-            selectionText.setText(dateFormat.format(date) + " : " + String.format(Locale.US,"%.02f", map.get(date)));
+            selectionText.setText(MainActivity.getDateFormat().format(date) + " : " + String.format(Locale.US,"%.02f", map.get(date)));
             plot.redraw();
             return true;
         }

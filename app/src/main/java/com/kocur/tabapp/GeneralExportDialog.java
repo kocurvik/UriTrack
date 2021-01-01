@@ -22,7 +22,7 @@ import java.util.Calendar;
  */
 
 public abstract class GeneralExportDialog extends DialogFragment implements View.OnClickListener {
-    protected EditText fromDate, toDate;
+    protected DateEditText fromDate, toDate;
     protected Button exportButton;
     protected DateManager dateManager;
     protected TextView infoText;
@@ -41,9 +41,9 @@ public abstract class GeneralExportDialog extends DialogFragment implements View
 
         this.exportButton = (Button) rootView.findViewById(R.id.exportButton);
         exportButton.setOnClickListener(this);
-        this.fromDate = (EditText) rootView.findViewById(R.id.fromExportDate);
+        this.fromDate = (DateEditText) rootView.findViewById(R.id.fromExportDate);
         fromDate.setOnClickListener(this);
-        this.toDate = (EditText) rootView.findViewById(R.id.toExportDate);
+        this.toDate = (DateEditText) rootView.findViewById(R.id.toExportDate);
         toDate.setOnClickListener(this);
         this.infoText = (TextView) rootView.findViewById(R.id.dialogInfo);
         this.toText = (TextView) rootView.findViewById(R.id.textView7);
@@ -52,13 +52,13 @@ public abstract class GeneralExportDialog extends DialogFragment implements View
 
 
 
-        this.dateManager = new DateManager(getContext(),fromDate,toDate);
+        this.dateManager = new DateManager(getContext(), fromDate, toDate);
         dateManager.setDate(-7, Calendar.DATE);
 
         return rootView;
     }
 
-    public void showDatePickerDialog(EditText dateText) {
+    public void showDatePickerDialog(DateEditText dateText) {
         DatePickerFragment newFragment = new DatePickerFragment();
         newFragment.setEditText(dateText);
         newFragment.show(getFragmentManager(), "datePicker");

@@ -134,16 +134,17 @@ public class UnitDialog extends DialogFragment implements View.OnClickListener {
             File[] files = mainContext.getFilesDir().listFiles();
             for(File f : files){
                 if (f.isFile() && f.getPath().endsWith(".csv")) {
-                    CSVManager manager = new CSVManager(f, mainContext);
                     try {
+                        CSVManager manager = new CSVManager(f, mainContext);
                         ArrayList<UriEvent> list = manager.getList();
                         for (UriEvent event : list){
                             event.convert(conversionRate);
                         }
                         manager.writeList(list);
-
                     } catch (IOException e) {
                         return"Something went wrong :-(";
+                    } catch (ParseException e){
+                        continue;
                     }
                 }
             }

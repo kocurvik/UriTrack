@@ -21,6 +21,7 @@
         <item>Note</item>>
     </string-array>
 
+
     <string-array name="analytics_types">
         <item>Volume urinated</item>
         <item>Intake volume</item>
@@ -53,9 +54,6 @@
         <item>oz</item>
     </string-array>
 
-
-
-
     <string-array name="drink_types">
         <item>Water</item>
         <item>Soda</item>
@@ -70,5 +68,22 @@
         <item>Decaf Coffee</item>
         <item>Decaf Tea</item>
         <item>Other</item>
+    </string-array>
+
+    <string-array name="date_formats">
+        <item>dd/MM/yyyy (01/02/2020)</item>
+        <item>dd.MM.yyyy (01.02.2020)</item>
+        <item>d.M.yyyy (1.2.2020)</item>
+        <item>MM/dd/yyyy (02/01/2020)</item>
+        <item>MM–dd–yyyy (02-01-2020)</item>
+        <item>d MMM yyyy (1 Feb 2020)</item>
+        <item>EEE, d MMM yyyy (Sat, 1 Feb 2020)</item>
+        <item>EEE, d.M.yyyy (Sat, 1.2.2020)</item>
+        <item>EEE, MM–dd-yyyy (Sat, 02-01-2020)</item>
+    </string-array>
+
+    <string-array name="time_formats">
+        <item>24-hour (15:24)</item>
+        <item>12-hour (3:24 AM)</item>
     </string-array>
 </resources>

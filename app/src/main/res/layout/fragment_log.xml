@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.kocur.tabapp.MainActivity$PlaceholderFragment">
 
-    <EditText
+    <com.kocur.tabapp.DateEditText
         android:id="@+id/logDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +18,8 @@
         android:ems="10"
         android:focusable="false"
         android:inputType="date"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:gravity="center"/>
 
     <ListView
         android:id="@+id/logList"
@@ -148,7 +149,7 @@
         <Space
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1"></Space>
+            android:layout_weight="1" />
 
     </LinearLayout>
 
