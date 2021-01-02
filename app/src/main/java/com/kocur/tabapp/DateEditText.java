@@ -7,12 +7,23 @@ import android.widget.EditText;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 public class DateEditText extends android.support.v7.widget.AppCompatEditText {
     private SimpleDateFormat dateSDF;
     private Date date;
+
+    public static Date getStartOfDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
 
     public DateEditText(Context context) {
         super(context);
@@ -30,13 +41,13 @@ public class DateEditText extends android.support.v7.widget.AppCompatEditText {
     }
 
     public void setDate(Date date){
-        this.date = date;
+        this.date = getStartOfDay(date);
         String newDateString = dateSDF.format(date);
         super.setText(newDateString);
     }
 
     public void setDate(long millis){
-        this.date = new Date(millis);
+        this.date = getStartOfDay(new Date(millis));
         String newDateString = dateSDF.format(date);
         setText(newDateString);
     }

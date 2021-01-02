@@ -311,14 +311,13 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
      * @param s Date in string form to be updated
      */
     public void update(String s){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.US);
         if(s.equals("")){
             setMap();
             refresh();
             return;
         }
         try {
-            Date d = dateFormat.parse(s);
+            Date d = MainActivity.getDefaultDateFormat().parse(s);
             if(map.containsKey(d)) {
                 setStats(d);
                 refresh();
