@@ -3,7 +3,9 @@ package com.kocur.tabapp;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,8 +20,11 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
-    /**
+/**
      * Created by kocur on 10/12/2017.
      */
 
@@ -45,7 +50,21 @@ public class DateTimeFormatDialog extends DialogFragment implements View.OnClick
         changeButton.setOnClickListener(this);
 
         this.timeSpinner = (Spinner) rootView.findViewById(R.id.timeSpinner);
+
+        if (MainActivity.getTimeFormatString().contains("a"))
+            this.timeSpinner.setSelection(1);
+        else
+            this.timeSpinner.setSelection(0);
+
         this.dateSpinner = (Spinner) rootView.findViewById(R.id.dateSpinner);
+        String[] stringArray = getResources().getStringArray(R.array.date_formats);
+
+        this.dateSpinner.setSelection(0);
+        for (int i = 0; i < stringArray.length; i++) {
+            if (stringArray[i].split(" \\(")[0].equals(MainActivity.getDateFormatString()))
+                this.dateSpinner.setSelection(i);
+        }
+
 
         return rootView;
     }

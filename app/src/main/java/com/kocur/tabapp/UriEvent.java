@@ -35,10 +35,10 @@ class UriEvent {
         this.otherDrink = otherDrink;
     }
 
-    public UriEvent(String type, Date date, String time, float volume, float intensity, String drinkType, String otherDrink, String note){
+    public UriEvent(String type, Date date, Date time, float volume, float intensity, String drinkType, String otherDrink, String note){
         this.type = type;
         this.date = MainActivity.getDefaultDateFormat().format(date);
-        this.time = time;
+        this.time = MainActivity.getDefaultTimeFormat().format(time);
         this.volume = volume;
         this.intensity = intensity;
         this.note = note;

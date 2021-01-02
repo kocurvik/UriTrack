@@ -43,7 +43,7 @@
         android:inputType="numberDecimal"
         android:text="1.0" />
 
-    <EditText
+    <com.kocur.tabapp.TimeEditText
         android:id="@+id/editTrackTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

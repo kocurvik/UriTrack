@@ -16,20 +16,17 @@ public class DateEditText extends android.support.v7.widget.AppCompatEditText {
 
     public DateEditText(Context context) {
         super(context);
-        dateSDF = new SimpleDateFormat(MainActivity.getDateFormatString(), Locale.US);
-//        defaultSDF = new SimpleDateFormat("dd/MM/YYYY", Locale.US);
+        dateSDF = MainActivity.getDateFormat();
     }
 
     public DateEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        dateSDF = new SimpleDateFormat(MainActivity.getDateFormatString(), Locale.US);
-//        defaultSDF = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        dateSDF = MainActivity.getDateFormat();
     }
 
     public DateEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        dateSDF = new SimpleDateFormat(MainActivity.getDateFormatString(), Locale.US);
-//        defaultSDF = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        dateSDF = MainActivity.getDateFormat();
     }
 
     public void setDate(Date date){
@@ -45,7 +42,6 @@ public class DateEditText extends android.support.v7.widget.AppCompatEditText {
     }
 
     public Date getDate() { return date; }
-
 
     public void updateDateFormat() {
         dateSDF = MainActivity.getDateFormat();

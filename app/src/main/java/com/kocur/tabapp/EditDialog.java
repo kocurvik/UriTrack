@@ -50,7 +50,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
     private Button plusButtonVolume;
     private Button minusButtonVolume;
     private DateEditText dateText;
-    private EditText timeText;
+    private TimeEditText timeText;
     private EditText volumeText;
     private EditText drinkText;
     private Spinner typeSpinner;
@@ -125,19 +125,22 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
 
 
         this.dateText = (DateEditText) rootView.findViewById(R.id.editTrackDate);
+        this.timeText = (TimeEditText) rootView.findViewById(R.id.editTrackTime);
         try {
             Date date = MainActivity.getDefaultDateFormat().parse(event.getDate());
             dateText.setDate(date);
+
+            Date time = MainActivity.getDefaultTimeFormat().parse(event.getTime());
+            timeText.setTime(time);
         } catch (ParseException e) {
-            Toast toast = Toast.makeText(getContext(), "Something went wrong with reading date!", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(getContext(), "Something went wrong with reading date and/or time!", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
             dismiss();
             e.printStackTrace();
         }
         dateText.setOnClickListener(this);
-        this.timeText = (EditText) rootView.findViewById(R.id.editTrackTime);
-        timeText.setText(event.getTime());
+
         timeText.setOnClickListener(this);
 
         this.volumeText = (EditText) rootView.findViewById(R.id.editTrackVolume);
@@ -187,7 +190,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
         newFragment.show(getFragmentManager(), "datePicker");
     }
 
-    public void showTimePickerDialog(EditText timeText){
+    public void showTimePickerDialog(TimeEditText timeText){
         TimePickerFragment newFragment = new TimePickerFragment();
         newFragment.show(getFragmentManager(), "timePicker");
         newFragment.setEditText(timeText);
@@ -241,7 +244,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
 
                     //String type, String date, String time, float volume, float intensity, String drinkType, String otherDrink, String note
                     UriEvent event = new UriEvent(typeSpinner.getSelectedItem().toString(),
-                            timeText.getText().toString(),timeText.getText().toString(), volume,
+                            dateText.getDate(), timeText.getTime(), volume,
                             intensity, drinkSpinner.getSelectedItem().toString(),
                             drinkText.getText().toString(), noteText.getText().toString());
 

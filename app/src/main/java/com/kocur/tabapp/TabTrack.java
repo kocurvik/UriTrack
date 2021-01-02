@@ -38,7 +38,7 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
     private Button plusButtonVolume;
     private Button minusButtonVolume;
     private DateEditText dateText;
-    private EditText timeText;
+    private TimeEditText timeText;
     private EditText volumeText;
     private EditText drinkText;
     private Spinner typeSpinner;
@@ -58,8 +58,6 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_track, container, false);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.US);
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm",Locale.US);
         long date = System.currentTimeMillis();
 
         this.typeSpinner = (Spinner) rootView.findViewById(R.id.typeEdit);
@@ -89,8 +87,8 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
         this.dateText = (DateEditText) rootView.findViewById(R.id.editTrackDate);
         dateText.setDate(date);
         dateText.setOnClickListener(this);
-        this.timeText = (EditText) rootView.findViewById(R.id.editTrackTime);
-        timeText.setText(timeFormat.format(date));
+        this.timeText = (TimeEditText) rootView.findViewById(R.id.editTrackTime);
+        timeText.setTime(date);
         timeText.setOnClickListener(this);
 
         this.volumeText = (EditText) rootView.findViewById(R.id.editTrackVolume);
@@ -103,7 +101,6 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
         noteText = (EditText) rootView.findViewById(R.id.noteText);
 
         this.volumeText1 = (TextView) rootView.findViewById(R.id.textVolume);
-        this.volumeText2 = (TextView) rootView.findViewById(R.id.textVolume2);
         this.drinkText1 = (TextView) rootView.findViewById(R.id.drinkText1);
         this.intensityText1 = (TextView) rootView.findViewById(R.id.intensityText1);
         this.intensityText2 = (TextView) rootView.findViewById(R.id.textIntensity2);
@@ -179,7 +176,7 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
         newFragment.show(getFragmentManager(), "datePicker");
     }
 
-    public void showTimePickerDialog(EditText timeText){
+    public void showTimePickerDialog(TimeEditText timeText){
         TimePickerFragment newFragment = new TimePickerFragment();
         newFragment.show(getFragmentManager(), "timePicker");
         newFragment.setEditText(timeText);
@@ -193,8 +190,6 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
         //View rootView = view.getRootView();
         switch(view.getId()) {
             case R.id.trackButton: {
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm-dd/MM/yyyy",Locale.US);
-
                 try {
                     //Date date = sdf.parse(dateTimeStr);
                     Float volume = Float.valueOf(volumeText.getText().toString());
@@ -202,7 +197,7 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
 
                     //String type, String date, String time, float volume, float intensity, String drinkType, String otherDrink, String note
                     UriEvent event = new UriEvent(typeSpinner.getSelectedItem().toString(),
-                            dateText.getDate(), timeText.getText().toString(), volume,
+                            dateText.getDate(), timeText.getTime(), volume,
                             intensity, drinkSpinner.getSelectedItem().toString(),
                             drinkText.getText().toString(), noteText.getText().toString());
 
@@ -302,7 +297,7 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
 
     public void updateDateTimeFormat() {
         this.dateText.updateDateFormat();
-//        this.timeText.updateTimeFormat();
+        this.timeText.updateTimeFormat();
     }
 
     public enum types {Urination, Intake, Leak, Urge, Catheter, Note};
@@ -387,7 +382,7 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
 
     private void DisableVolume() {
         volumeText1.setAlpha(0.2f);
-        volumeText2.setAlpha(0.2f);
+        unitText.setAlpha(0.2f);
         volumeText.setAlpha(0.2f);
         volumeText.setFocusable(false);
         volumeText.setFocusableInTouchMode(false);
@@ -399,7 +394,7 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
 
     private void EnableVolume() {
         volumeText1.setAlpha(1f);
-        volumeText2.setAlpha(1f);
+        unitText.setAlpha(1f);
         volumeText.setAlpha(1f);
         plusButtonVolume.setAlpha(1f);
         minusButtonVolume.setAlpha(1f);

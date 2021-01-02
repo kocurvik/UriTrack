@@ -8,6 +8,7 @@ import android.content.Context;
 import android.media.Image;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +21,11 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.text.AttributedCharacterIterator;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 /**
  * Class that generates views for listview
@@ -101,7 +104,13 @@ public class LogAdapter extends ArrayAdapter<UriEvent> {
 
         TextView textViewTime = (TextView) logView.findViewById(R.id.logTime);
 
-        textViewTime.setText(event.getTime());
+        try {
+            Date time = MainActivity.getDefaultTimeFormat().parse(event.getTime());
+            textViewTime.setText(MainActivity.getTimeFormat().format(time));
+        } catch (ParseException e) {
+            Log.w("LogView", "Time not parsed in logview");
+            textViewTime.setText(event.getTime());
+        }
 
         TextView textView1 = (TextView) logView.findViewById(R.id.logLine1);
 
@@ -113,7 +122,7 @@ public class LogAdapter extends ArrayAdapter<UriEvent> {
 
         ImageView imageView = (ImageView) logView.findViewById(R.id.imageView);
 
-        if (event.getNote()!=""){
+        if (!event.getNote().equals("")){
             textComment.setText(event.getNote());
             note.setVisibility(View.VISIBLE);
             textComment.setVisibility(View.VISIBLE);

@@ -39,7 +39,11 @@ public class MainActivity extends AppCompatActivity {
 
     public static SimpleDateFormat getDefaultDateFormat() {return new SimpleDateFormat("dd/MM/yyyy", Locale.US);}
 
-    public static SimpleDateFormat getDateFormat() { return new SimpleDateFormat(getDateFormatString());}
+    public static SimpleDateFormat getDefaultTimeFormat() { return new SimpleDateFormat("HH:mm", Locale.US);}
+
+    public static SimpleDateFormat getDateFormat() { return new SimpleDateFormat(getDateFormatString(), Locale.US);}
+
+    public static SimpleDateFormat getTimeFormat() { return new SimpleDateFormat(getTimeFormatString(), Locale.US);}
 
     public void setVolumeString(String newUnit){
         SharedPreferences myPrefs = getSharedPreferences("pref", getApplicationContext().MODE_PRIVATE);

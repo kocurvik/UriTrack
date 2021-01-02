@@ -13,6 +13,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 /**
@@ -22,7 +24,7 @@ import java.util.Locale;
 public class TimePickerFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
 
-    private EditText editText;
+    private TimeEditText editText;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -31,9 +33,13 @@ public class TimePickerFragment extends DialogFragment
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
 
-        // Create a new instance of TimePickerDialog and return it
-        return new TimePickerDialog(getActivity(), this, hour, minute,true);
-                //DateFormat.is24HourFormat(getActivity()));
+        if (MainActivity.getTimeFormatString().contains("a")){
+            return new TimePickerDialog(getActivity(), this, hour, minute,false);
+        } else {
+            return new TimePickerDialog(getActivity(), this, hour, minute,true);
+        }
+
+
     }
 
     public void onConfigurationChanged(Configuration configuration) {
@@ -46,7 +52,7 @@ public class TimePickerFragment extends DialogFragment
         dismiss();
     }
 
-    public void setEditText(EditText editText) {
+    public void setEditText(TimeEditText editText) {
         this.editText = editText;
     }
 
@@ -58,6 +64,10 @@ public class TimePickerFragment extends DialogFragment
             dismiss();
             return;
         }
-        editText.setText(String.format(Locale.US,"%02d",hourOfDay) + ":" + String.format(Locale.US,"%02d",minute));
+
+        Calendar c = new GregorianCalendar();
+        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        c.set(Calendar.MINUTE, minute);
+        editText.setTime(c.getTime());
     }
 }
