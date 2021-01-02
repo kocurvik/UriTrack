@@ -24,3 +24,4 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keep class com.androidplot.** { *; }
+-keepattributes LineNumberTable,SourceFile
