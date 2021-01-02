@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
@@ -115,12 +116,24 @@ public class PDFDialog extends GeneralExportDialog {
 
                 UriEvent e = subList.get(subList.size() - listr);
 
-                cell = new PdfPCell(new Phrase(e.getTime()));
+                String timeString;
+                try {
+                    Date d = MainActivity.getDefaultTimeFormat().parse(e.getTime());
+                    timeString = MainActivity.getTimeFormat().format(d);
+                } catch(ParseException exception) {
+                    Log.w("PDFExport", "Time not parsed correctly :-(");
+                    timeString = e.getTime();
+                }
+
+                cell = new PdfPCell(new Phrase(timeString));
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 cell.setVerticalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
 
-                table.addCell(e.getType());
+                cell = new PdfPCell(new Phrase(e.getType()));
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setVerticalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
 
                 if (e.getType().equals("Urge") || e.getType().equals("Note")) {
                     cell = new PdfPCell(new Phrase(" "));
@@ -198,7 +211,7 @@ public class PDFDialog extends GeneralExportDialog {
         table.setHorizontalAlignment(Element.ALIGN_CENTER);
 
 //        table.setWidthPercentage(90);
-        table.setTotalWidth(new float[]{ 100, 54, 76, 56, 50, 76, 140});
+        table.setTotalWidth(new float[]{ 100, 62, 76, 56, 50, 76, 136});
         table.setLockedWidth(true);
         table.setHeaderRows(1);
 

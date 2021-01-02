@@ -1,6 +1,7 @@
 package com.kocur.tabapp;
 
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkVolumeUnit(){
-        SharedPreferences myPrefs = getSharedPreferences("pref", getApplicationContext().MODE_PRIVATE);
+        SharedPreferences myPrefs = getSharedPreferences("pref", Context.MODE_PRIVATE);
         volumeString = myPrefs.getString("VolumeUnit", "ml");
     }
 
@@ -63,13 +64,13 @@ public class MainActivity extends AppCompatActivity {
     public static String getTimeFormatString() {return timeFormatString;}
 
     private void checkDateTimeFormatString(){
-        SharedPreferences myPrefs = getSharedPreferences("pref", getApplicationContext().MODE_PRIVATE);
-        dateFormatString = myPrefs.getString("DateFormatString", "dd/MM/yyyy");
-        timeFormatString = myPrefs.getString("TimeFormatString", "HH:MM");
+        SharedPreferences myPrefs = getSharedPreferences("pref", Context.MODE_PRIVATE);
+        dateFormatString = myPrefs.getString("DateFormatString", "EEE, d.M.yyyy");
+        timeFormatString = myPrefs.getString("TimeFormatString", "HH:mm");
     }
 
     public void setDateTimeFormatString(String newDateFormat, String newTimeFormat){
-        SharedPreferences myPrefs = getSharedPreferences("pref", getApplicationContext().MODE_PRIVATE);
+        SharedPreferences myPrefs = getSharedPreferences("pref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = myPrefs.edit();
         editor.putString("DateFormatString", newDateFormat);
         editor.putString("TimeFormatString", newTimeFormat);

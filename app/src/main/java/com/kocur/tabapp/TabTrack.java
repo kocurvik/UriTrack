@@ -122,8 +122,6 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
     public void onResume() {
         super.onResume();
         View rootView = this.getView().getRootView();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.US);
         long date = System.currentTimeMillis();
 
 
@@ -133,7 +131,7 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
         //EditText dateText = (EditText) rootView.findViewById(R.id.editTrackDate);
         this.dateText.setDate(date);
         //EditText timeText = (EditText) rootView.findViewById(R.id.editTrackTime);
-        this.timeText.setText(timeFormat.format(date));
+        this.timeText.setTime(date);
         Log.d("MyApp", "resume");
     }
 
