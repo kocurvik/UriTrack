@@ -1,17 +1,13 @@
 package com.kocur.tabapp;
 
 import android.content.Context;
-import android.text.Editable;
 import android.util.AttributeSet;
-import android.widget.EditText;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
-public class DateEditText extends android.support.v7.widget.AppCompatEditText {
+public class DateEditText extends androidx.appcompat.widget.AppCompatEditText {
     private SimpleDateFormat dateSDF;
     private Date date;
 

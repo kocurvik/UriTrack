@@ -24,16 +24,16 @@ class UriEvent {
     private String otherDrink;
 
 
-    public UriEvent(String type, String date, String time, float volume, float intensity, String drinkType, String otherDrink, String note){
-        this.type = type;
-        this.date = date;
-        this.time = time;
-        this.volume = volume;
-        this.intensity = intensity;
-        this.note = note;
-        this.drinkType = drinkType;
-        this.otherDrink = otherDrink;
-    }
+//    public UriEvent(String type, String date, String time, float volume, float intensity, String drinkType, String otherDrink, String note){
+//        this.type = type;
+//        this.date = date;
+//        this.time = time;
+//        this.volume = volume;
+//        this.intensity = intensity;
+//        this.note = note;
+//        this.drinkType = drinkType;
+//        this.otherDrink = otherDrink;
+//    }
 
     public UriEvent(String type, Date date, Date time, float volume, float intensity, String drinkType, String otherDrink, String note){
         this.type = type;
@@ -54,28 +54,6 @@ class UriEvent {
     public UriEvent(String in, String date) {
         //Log.d("I",in);
         this.date = date;
-        String[] list = in.split("\t");
-        for (String s : list) {
-            s.trim();
-        }
-        this.type = list[0];
-        this.time = list[1];
-        this.volume = Float.parseFloat(list[2]);
-        this.intensity = Float.parseFloat(list[3]);
-        this.drinkType = list[4];
-        if (list.length > 5)
-            this.otherDrink = list[5];
-        else
-            this.otherDrink = "";
-        if (list.length > 6)
-            this.note = list[6];
-        else
-            this.note = "";
-    }
-
-    public UriEvent(String in, Date date) {
-        //Log.d("I",in);
-        this.date = MainActivity.getDefaultDateFormat().format(date);
         String[] list = in.split("\t");
         for (String s : list) {
             s.trim();

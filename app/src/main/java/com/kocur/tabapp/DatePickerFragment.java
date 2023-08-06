@@ -4,19 +4,16 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import androidx.fragment.app.DialogFragment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
 /**
  * Created by kocur on 7/20/2017.

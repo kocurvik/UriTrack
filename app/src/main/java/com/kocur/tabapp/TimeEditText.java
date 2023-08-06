@@ -5,9 +5,8 @@ import android.util.AttributeSet;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
-public class TimeEditText extends android.support.v7.widget.AppCompatEditText {
+public class TimeEditText extends androidx.appcompat.widget.AppCompatEditText {
     private SimpleDateFormat timeSDF;
     private Date date;
 

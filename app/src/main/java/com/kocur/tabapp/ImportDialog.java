@@ -8,8 +8,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -36,7 +35,7 @@ import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static android.support.v7.app.AppCompatActivity.RESULT_OK;
+import static androidx.appcompat.app.AppCompatActivity.RESULT_OK;
 
 /**
  * Created by kocur on 8/26/2017.

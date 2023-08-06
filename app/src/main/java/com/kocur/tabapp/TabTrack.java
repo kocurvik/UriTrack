@@ -4,9 +4,9 @@ package com.kocur.tabapp;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 /**

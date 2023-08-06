@@ -1,21 +1,14 @@
 package com.kocur.tabapp;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 import android.view.View;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;

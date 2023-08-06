@@ -1,56 +1,35 @@
 package com.kocur.tabapp;
 
-import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.PointF;
-import android.provider.ContactsContract;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.graphics.ColorUtils;
-import android.support.v4.util.Pair;
-import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
+import androidx.core.graphics.ColorUtils;
+import androidx.core.util.Pair;
+
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.androidplot.ui.Insets;
-import com.androidplot.ui.Size;
-import com.androidplot.ui.SizeMetric;
-import com.androidplot.ui.SizeMode;
 import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.StepMode;
-import com.androidplot.xy.XYCoords;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.text.DateFormat;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -58,7 +37,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * Created by kocur on 7/17/2017.

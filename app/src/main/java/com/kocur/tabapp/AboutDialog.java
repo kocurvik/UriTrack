@@ -1,16 +1,12 @@
 package com.kocur.tabapp;
 
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.text.method.ScrollingMovementMethod;
+import androidx.fragment.app.DialogFragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-
-import java.util.Calendar;
 
 /**
  * Created by kocur on 12/31/2017.

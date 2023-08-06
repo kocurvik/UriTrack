@@ -1,28 +1,16 @@
 package com.kocur.tabapp;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.DialogFragment;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.DialogFragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
      * Created by kocur on 10/12/2017.
