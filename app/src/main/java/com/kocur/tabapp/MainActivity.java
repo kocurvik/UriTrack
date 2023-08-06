@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkVolumeUnit(){
         SharedPreferences myPrefs = getSharedPreferences("pref", Context.MODE_PRIVATE);
-        volumeString = myPrefs.getString("VolumeUnit", "ml");
+        volumeString = myPrefs.getString("VolumeUnit", "dcl");
     }
 
     public static String getDateFormatString() {return dateFormatString;}

@@ -76,7 +76,7 @@ public class UnitDialog extends DialogFragment implements View.OnClickListener {
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         } else if (this.checkBox.isChecked() && !oldUnit.equals(newUnit)) {
-            UnitConversionTask unitConversionTask = new UnitConversionTask(getContext().getApplicationContext(), activity, getContext());
+            UnitConversionTask unitConversionTask = new UnitConversionTask(getContext().getApplicationContext(), activity, getContext(), newUnit);
             unitConversionTask.execute(oldUnit, newUnit);
             dismiss();
         } else {
@@ -93,11 +93,13 @@ public class UnitDialog extends DialogFragment implements View.OnClickListener {
         private final Context mainContext;
         private final ProgressDialog progressDialog;
         private final MainActivity mainActivity;
+        private final String newUnit;
 
-        public UnitConversionTask(Context mainContext, MainActivity mainActivity, Context localContext) {
+        public UnitConversionTask(Context mainContext, MainActivity mainActivity, Context localContext, String newUnit) {
             this.context = localContext;
             this.mainContext = mainContext;
             this.mainActivity = mainActivity;
+            this.newUnit = newUnit;
 
             progressDialog = new ProgressDialog(context);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -110,13 +112,12 @@ public class UnitDialog extends DialogFragment implements View.OnClickListener {
         }
 
         protected void onPostExecute(String resultString) {
-            mainActivity.notifyFragments();
+            mainActivity.setVolumeString(newUnit);
             ((MainActivity) mainActivity).notifyChange("", true);
             progressDialog.dismiss();
             Toast toast = Toast.makeText(mainContext, resultString, Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
-
         }
 
         @Override
@@ -148,7 +149,6 @@ public class UnitDialog extends DialogFragment implements View.OnClickListener {
                     }
                 }
             }
-            mainActivity.setVolumeString(newUnit);
             return "Units changed with conversion!";
         }
     }
