@@ -1,16 +1,16 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    signingConfigs {
-    }
-    compileSdkVersion 30
-    buildToolsVersion '30.0.3'
+    namespace "com.kocur.tabapp"
+    compileSdkVersion 33
     defaultConfig {
         applicationId "com.kocur.tabapp"
-        minSdkVersion 15
-        targetSdkVersion 30
-        versionCode 11
-        versionName "1.4.0"
+        minSdk 24
+        targetSdk 33
+        versionCode 16
+        versionName "1.5.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -22,29 +22,24 @@ android {
             debuggable true
         }
     }
-}
-
-allprojects {
-    repositories {
-        jcenter()
-        maven {
-            url 'https://maven.google.com'
-        }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        viewBinding true
     }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+//    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support:design:26.+'
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.itextpdf:itextg:5.5.9'
-}
-
-dependencies {
-    compile "com.androidplot:androidplot-core:${androidplotCoreVersion}"
+    implementation 'com.android.support:appcompat-v7:26.+'
+    implementation 'com.android.support:design:26.+'
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.itextpdf:itextg:5.5.9'
+    implementation "com.androidplot:androidplot-core:${androidplotCoreVersion}"
 }

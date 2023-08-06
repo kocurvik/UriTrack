@@ -4,6 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TabApp.iml" filepath="$PROJECT_DIR$/TabApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TabApp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TabApp.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TabApp.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TabApp.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TabApp.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TabApp.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TabApp.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TabApp.app.unitTest.iml" />
     </modules>
   </component>
 </project>
