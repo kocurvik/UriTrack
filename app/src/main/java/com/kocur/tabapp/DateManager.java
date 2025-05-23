@@ -90,6 +90,13 @@ public class DateManager {
         return list;
     }
 
+    public Date getNextDate() {
+        Calendar c = Calendar.getInstance();
+        c.setTime(toDate.getDate());
+        c.add(Calendar.DATE, 1);
+        return c.getTime();
+    }
+
     /**
      * @return List of filenames corresponding to the selected date range
      * @throws ParseException

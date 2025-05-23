@@ -8,6 +8,11 @@
         android:title="Date and Time Formats"
         app:showAsAction="never" />
     <item
+        android:id="@+id/daystart"
+        android:orderInCategory="100"
+        android:title="Set Start of Day Time"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/changeunit"
         android:orderInCategory="100"
         android:title="@string/measurement_units"

@@ -5,22 +5,17 @@ package com.kocur.tabapp;
  */
 
 import android.content.Context;
-import android.media.Image;
 import android.text.TextUtils;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
 import java.io.IOException;
-import java.text.AttributedCharacterIterator;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,17 +27,35 @@ import java.util.Date;
  */
 public class LogAdapter extends ArrayAdapter<UriEvent> {
     private final Context context;
-    private ArrayList<UriEvent> list;
+    private ArrayList<UriEvent> list_1;
+    private ArrayList<UriEvent> list_2;
     private final TabLog tabLog;
-    private CSVManager manager;
+    private CSVManager manager_1;
+    private CSVManager manager_2;
     private ImageView toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic, toggleNotePic;
 
-    public LogAdapter(Context context, ArrayList<UriEvent> list, TabLog tabLog, CSVManager manager) throws IOException {
-        super(context, -1, list);
+    public LogAdapter(Context context, TabLog tabLog, ArrayList<UriEvent> list_1, CSVManager manager_1, ArrayList<UriEvent> list_2, CSVManager manager_2) throws IOException {
+//        super(context, -1, list_1);
+        super(context, -1);
         this.context = context;
-        this.list = list;
         this.tabLog = tabLog;
-        this.manager = manager;
+        this.list_1 = list_1;
+        this.manager_1 = manager_1;
+        this.list_2 = list_2;
+        this.manager_2 = manager_2;
+    }
+
+    @Override
+    public int getCount(){
+        return list_1.size() + list_2.size();
+    }
+
+    @Override
+    public UriEvent getItem(int position){
+        if (position < list_1.size()){
+            return list_1.get(position);
+        }
+        return list_2.get(position - list_1.size());
     }
 
     /**
@@ -51,8 +64,13 @@ public class LogAdapter extends ArrayAdapter<UriEvent> {
      * @throws IOException
      */
     public void remove(int position) throws IOException {
-        list.remove(position);
-        manager.writeList(list);
+        if (position < list_1.size()){
+            list_1.remove(position);
+            manager_1.writeList(list_1);
+        } else {
+            list_2.remove(position - list_1.size());
+            manager_2.writeList(list_2);
+        }
         notifyDataSetChanged();
     }
 
@@ -63,21 +81,83 @@ public class LogAdapter extends ArrayAdapter<UriEvent> {
      * @throws IOException
      */
     public void change(int position, UriEvent event) throws IOException {
-        list.set(position,event);
-        Collections.sort(list, new Comparator<UriEvent>() {
-            public int compare(UriEvent e1, UriEvent e2) {
-                if (e1.getMins() > e2.getMins()) return 1;
-                if (e1.getMins() < e2.getMins()) return -1;
-                return 0;
-            }});
-        manager.writeList(list);
-        notifyDataSetChanged();
+        // Case when the date does not change
+        if (event.getDate().equals(getItem(position).getDate())) {
+            if (position < list_1.size()) {
+                list_1.set(position, event);
+                Collections.sort(list_1, new Comparator<UriEvent>() {
+                    public int compare(UriEvent e1, UriEvent e2) {
+                        if (e1.getMins() > e2.getMins()) return 1;
+                        if (e1.getMins() < e2.getMins()) return -1;
+                        return 0;
+                    }
+                });
+                manager_1.writeList(list_1);
+                notifyDataSetChanged();
+            } else {
+                position = position - list_1.size();
+                list_2.set(position, event);
+                Collections.sort(list_2, new Comparator<UriEvent>() {
+                    public int compare(UriEvent e1, UriEvent e2) {
+                        if (e1.getMins() > e2.getMins()) return 1;
+                        if (e1.getMins() < e2.getMins()) return -1;
+                        return 0;
+                    }
+                });
+                manager_2.writeList(list_2);
+                notifyDataSetChanged();
+            }
+        } else {
+            if (position < list_1.size()){
+                list_1.remove(position);
+                list_2.add(event);
+            } else {
+                list_2.remove(position - list_1.size());
+                list_1.add(event);
+            }
+
+            Collections.sort(list_1, new Comparator<UriEvent>() {
+                public int compare(UriEvent e1, UriEvent e2) {
+                    if (e1.getMins() > e2.getMins()) return 1;
+                    if (e1.getMins() < e2.getMins()) return -1;
+                    return 0;
+                }
+            });
+            manager_1.writeList(list_1);
+            notifyDataSetChanged();
+
+            Collections.sort(list_2, new Comparator<UriEvent>() {
+                public int compare(UriEvent e1, UriEvent e2) {
+                    if (e1.getMins() > e2.getMins()) return 1;
+                    if (e1.getMins() < e2.getMins()) return -1;
+                    return 0;
+                }
+            });
+            manager_2.writeList(list_2);
+            notifyDataSetChanged();
+
+        }
+
+
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        UriEvent event = list.get(position);
+        UriEvent event;
+        if (position < list_1.size()){
+            event = list_1.get(position);
+            if (event.getMins() < MainActivity.getDayStartMinutes()){
+                return new Space(context);
+            }
+        } else {
+            event = list_2.get(position - list_1.size());
+            int startMinutes = MainActivity.getDayStartMinutes();
+            long mins = event.getMins();
+            if (event.getMins() >= MainActivity.getDayStartMinutes()){
+                return new Space(context);
+            }
+        }
 
         if(event.getType().equals("Urination") && toggleUrinationPic.getAlpha() != 1f) {
             return new Space(context);

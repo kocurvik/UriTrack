@@ -147,7 +147,7 @@ class UriEvent {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return date.getTime();
+        return date.getHours() * 60 + date.getMinutes();
     }
 
     public int getTypeInt() {

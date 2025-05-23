@@ -33,10 +33,13 @@ public class MainActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
     private static String volumeString, dateFormatString, timeFormatString;
+    private static int dayStartMinutes;
 
     public static String getVolumeString(){
         return volumeString;
     }
+
+    public static int getDayStartMinutes() {return dayStartMinutes;}
 
     public static SimpleDateFormat getDefaultDateFormat() {return new SimpleDateFormat("dd/MM/yyyy", Locale.US);}
 
@@ -45,6 +48,14 @@ public class MainActivity extends AppCompatActivity {
     public static SimpleDateFormat getDateFormat() { return new SimpleDateFormat(getDateFormatString(), Locale.US);}
 
     public static SimpleDateFormat getTimeFormat() { return new SimpleDateFormat(getTimeFormatString(), Locale.US);}
+
+    public static String getDayStartString() {
+        return getTimeFormat().format(getDayStartDate());
+    }
+
+    public static Date getDayStartDate(){
+        return new Date(1970, 1, 1, getDayStartMinutes() / 60 , getDayStartMinutes() % 60);
+    }
 
     public void setVolumeString(String newUnit){
         SharedPreferences myPrefs = getSharedPreferences("pref", getApplicationContext().MODE_PRIVATE);
@@ -58,6 +69,20 @@ public class MainActivity extends AppCompatActivity {
     private void checkVolumeUnit(){
         SharedPreferences myPrefs = getSharedPreferences("pref", Context.MODE_PRIVATE);
         volumeString = myPrefs.getString("VolumeUnit", "dcl");
+    }
+
+    public void setDayStartMinutes(int newDayStartMinutes){
+        SharedPreferences myPrefs = getSharedPreferences("pref", getApplicationContext().MODE_PRIVATE);
+        SharedPreferences.Editor editor = myPrefs.edit();
+        editor.putString("dayStartMinutes", String.valueOf(newDayStartMinutes));
+        editor.apply();
+        dayStartMinutes = newDayStartMinutes;
+        notifyFragments();
+    }
+
+    private void checkDayStartMinutes(){
+        SharedPreferences myPrefs = getSharedPreferences("pref", Context.MODE_PRIVATE);
+        dayStartMinutes = Integer.parseInt(myPrefs.getString("dayStartMinutes", "0"));
     }
 
     public static String getDateFormatString() {return dateFormatString;}
@@ -88,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkVolumeUnit();
+        checkDayStartMinutes();
         checkDateTimeFormatString();
 
         setContentView(R.layout.activity_main);
@@ -195,6 +221,13 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.help) {
             HelpDialog textDialog = new HelpDialog();
             textDialog.show(getSupportFragmentManager(),"aboutDialog");
+            return true;
+        }
+
+        if (id == R.id.daystart){
+            DayStartDialog dayStartDialog = new DayStartDialog();
+            dayStartDialog.show(getSupportFragmentManager(), "dayStartDialog");
+            dayStartDialog.setActivity(this);
             return true;
         }
 

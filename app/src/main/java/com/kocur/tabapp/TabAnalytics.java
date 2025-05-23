@@ -25,14 +25,17 @@ import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.EventListener;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -249,6 +252,7 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
         else
             s = String.format(Locale.US, "Average: %.02f",avg);
 
+        s = s + "\nDays start at: " + MainActivity.getDayStartString();
         textView.setText(s);
     }
 
@@ -296,8 +300,12 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
         }
         try {
             Date d = MainActivity.getDefaultDateFormat().parse(s);
-            if(map.containsKey(d)) {
+            if(map.containsKey(d) || d.equals(getDateManager().getNextDate())) {
                 setStats(d);
+                Calendar c = Calendar.getInstance();
+                c.setTime(d);
+                c.add(Calendar.DATE, -1);
+                setStats(c.getTime());
                 refresh();
             }
         } catch (ParseException e) {
@@ -323,21 +331,48 @@ public class TabAnalytics extends Fragment implements View.OnClickListener, Adap
      * @param date Date for which the value is calculated
      */
     public void setStats(Date date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.US);
-        String stringDate = dateFormat.format(date);
-        CSVManager manager = new CSVManager(stringDate, getContext());
+        CSVManager manager_1 = new CSVManager(date, getContext());
+
+        // Get next date
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DATE, 1);
+        CSVManager manager_2 = new CSVManager(c.getTime(), getContext());
 
         float val = 0f;
         float num = 0f;
         float val2 = 0f;
 
-        List<UriEvent> list = null;
+        List<UriEvent> list_1 = null;
         try {
-            list = manager.getList();
+            list_1 = manager_1.getList();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        List<UriEvent> list_2 = null;
+        try {
+            list_2 = manager_2.getList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<UriEvent> list = new ArrayList<UriEvent>();
+
+        for (UriEvent event: list_1) {
+            if (event.getMins() >= MainActivity.getDayStartMinutes()){
+                list.add(event);
+            }
+        }
+
+        for (UriEvent event: list_2) {
+            if (event.getMins() < MainActivity.getDayStartMinutes()){
+                list.add(event);
+            }
+        }
+
         for (UriEvent event : list) {
+
             switch (spinner.getSelectedItemPosition()) {
                 //Urinated Volume
                 case 0:

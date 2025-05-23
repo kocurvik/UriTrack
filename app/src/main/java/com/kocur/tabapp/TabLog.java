@@ -34,6 +34,14 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
     private ImageView toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic, toggleNotePic;
     private TextView ioTextView;
 
+    public Date nextDay(){
+        Date current_date = dateText.getDate();
+        Calendar c = Calendar.getInstance();
+        c.setTime(current_date);
+        c.add(Calendar.DATE, 1);
+        return c.getTime();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -86,7 +94,7 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
      * @param date Date that has been updated elsewhere
      */
     public void populate(String date) {
-        if (MainActivity.getDefaultDateFormat().format(dateText.getDate()).equals(date) || date.equals("")){
+        if (MainActivity.getDefaultDateFormat().format(dateText.getDate()).equals(date) || date.equals("") || MainActivity.getDefaultDateFormat().format(nextDay()).equals(date)){
             populate();
         }
     }
@@ -95,30 +103,53 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
      * Refresh listview
      */
     public void populate() {
-        CSVManager manager = new CSVManager(dateText.getDate(),getContext());
+        CSVManager manager_1 = new CSVManager(dateText.getDate(),getContext());
+        CSVManager manager_2 = new CSVManager(nextDay(), getContext());
         //ArrayList<String> stringList = new ArrayList<String>();
         try {
-            ArrayList<UriEvent> list = manager.getList();
-            Collections.sort(list, new Comparator<UriEvent>() {
+            ArrayList<UriEvent> list_1 = manager_1.getList();
+            Collections.sort(list_1, new Comparator<UriEvent>() {
                 public int compare(UriEvent e1, UriEvent e2) {
                     if (e1.getMins() > e2.getMins()) return 1;
                     if (e1.getMins() < e2.getMins()) return -1;
                     return 0;
                 }});
-            manager.writeList(list);
-            //Log.d("I","list loaded");
-            LogAdapter adapter = new LogAdapter(getContext(), list,this,manager);
+            manager_1.writeList(list_1);
+
+            ArrayList<UriEvent> list_2 = manager_2.getList();
+            Collections.sort(list_2, new Comparator<UriEvent>() {
+                public int compare(UriEvent e1, UriEvent e2) {
+                    if (e1.getMins() > e2.getMins()) return 1;
+                    if (e1.getMins() < e2.getMins()) return -1;
+                    return 0;
+                }});
+            manager_2.writeList(list_2);
+
+            //Log.d("I","list_1 loaded");
+            LogAdapter adapter = new LogAdapter(getContext(), this, list_1, manager_1, list_2, manager_2);
             adapter.setup(toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic, toggleNotePic);
             logView.setAdapter(adapter);
             float intake = 0;
             float output = 0;
-            for(UriEvent event: list){
+            for(UriEvent event: list_1){
+                if (event.getMins() < MainActivity.getDayStartMinutes()){
+                    continue;
+                }
                 if (event.getType().equals("Urination") || event.getType().equals("Leak") || event.getType().equals("Catheter"))
                     output += event.getVolume();
                 if (event.getType().equals("Fluid Intake"))
                     intake += event.getVolume();
             }
-            ioTextView.setText(String.format(Locale.US,"Intake: %.02f " + MainActivity.getVolumeString() + ", Voided: %.02f " + MainActivity.getVolumeString(), intake, output));
+            for(UriEvent event: list_2){
+                if (event.getMins() >= MainActivity.getDayStartMinutes()){
+                    continue;
+                }
+                if (event.getType().equals("Urination") || event.getType().equals("Leak") || event.getType().equals("Catheter"))
+                    output += event.getVolume();
+                if (event.getType().equals("Fluid Intake"))
+                    intake += event.getVolume();
+            }
+            ioTextView.setText(String.format(Locale.US,"Intake: %.02f " + MainActivity.getVolumeString() + ", Voided: %.02f " + MainActivity.getVolumeString() + "\nDay Starts at: " + MainActivity.getDayStartString() , intake, output));
 
         } catch (Exception e) {
             errorMsg(e);
@@ -260,10 +291,11 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
      * @throws IOException
      */
     public void change(int position, Date date, UriEvent event) throws IOException {
-        if (!this.dateText.getDate().equals(date)){
+        if (!this.dateText.getDate().equals(date) && !nextDay().equals(date)){
             ((LogAdapter) this.logView.getAdapter()).remove(position);
-            ((MainActivity) getActivity()).notifyChange(this.dateText.getText().toString(),true);
-            this.dateText.setDate(date);
+            ((MainActivity) getActivity()).notifyChange(this.dateText.getDate(),true);
+            ((MainActivity) getActivity()).notifyChange(nextDay().toString(),true);
+            //this.dateText.setDate(date);
             CSVManager manager = new CSVManager(date, getContext());
             manager.add(event);
             ArrayList<UriEvent> list = manager.getList();
@@ -274,13 +306,14 @@ public class TabLog extends Fragment implements View.OnClickListener, AdapterVie
                     return 0;
                 }});
             manager.writeList(list);
-            LogAdapter adapter = new LogAdapter(getContext(), list,this,manager);
-            adapter.setup(toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic, toggleNotePic);
-            logView.setAdapter(adapter);
+//            LogAdapter adapter = new LogAdapter(getContext(), this, list, manager, , );
+//            adapter.setup(toggleUrinationPic, toggleIntakePic, toggleLeakPic, toggleUrgePic, toggleCatheterPic, toggleNotePic);
+//            logView.setAdapter(adapter);
             ((MainActivity) getActivity()).notifyChange(date,true);
         } else {
             ((LogAdapter) logView.getAdapter()).change(position,event);
             ((MainActivity) getActivity()).notifyChange(date,true);
+            ((MainActivity) getActivity()).notifyChange(nextDay(),true);
         }
     }
 

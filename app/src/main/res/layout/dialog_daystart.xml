@@ -1,0 +1,87 @@
+<!-- fragment_edit_name.xml -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout4"
+            android:layout_below="@+id/space9"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Starting time" />
+
+            <Space
+                android:layout_width="20dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+            <com.kocur.tabapp.TimeEditText
+                android:id="@+id/startTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:inputType="date"
+                tools:editable="false" />
+
+        </LinearLayout>
+
+                <Button
+            android:id="@+id/confirmButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/space10"
+            android:layout_centerHorizontal="true"
+            android:text="Confirm" />
+
+        <Space
+            android:id="@+id/space15"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/linearLayout5"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/dialogInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="This setting will change how events are shown in the Log and Analytics tab. You can change when the day starts to calculate total volumes and analytics for each day from the starting time to the starting time in the next day. Note that this only changes the behavior of the Log and Analytics tabs. The export, import and clear functionalities still use midnight as the start of the day." />
+
+        <Space
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:id="@+id/space9"
+            android:layout_below="@+id/dialogInfo"
+            android:layout_alignLeft="@+id/space15"
+            android:layout_alignStart="@+id/space15" />
+
+        <Space
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/linearLayout4"
+            android:layout_alignLeft="@+id/space15"
+            android:layout_alignStart="@+id/space15"
+            android:id="@+id/space10" />
+
+    </android.widget.RelativeLayout>
+</ScrollView>
