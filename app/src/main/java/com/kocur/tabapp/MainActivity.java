@@ -194,6 +194,15 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.exportCSV) {
+            /*Toast toast = Toast.makeText(getBaseContext(),"Not implemented yet!",Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();+*/
+            CSVDialog csvDialog = new CSVDialog();
+            csvDialog.show(getSupportFragmentManager(),"csvDialog");
+            return true;
+        }
+
         if (id == R.id.export) {
             ExportDialog exportDialog = new ExportDialog();
             exportDialog.show(getSupportFragmentManager(),"exportDialog");

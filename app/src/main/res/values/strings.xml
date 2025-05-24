@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">UriTrack</string>
     <string name="exportPDF">Export PDF</string>
+    <string name="exportCSV">Export CSV</string>
     <string name="export">Export Data</string>
     <string name="imPort">Import Data</string>
     <string name="clear">Clear Data</string>
@@ -67,16 +68,21 @@
         <item>Fruit</item>
         <item>Decaf Coffee</item>
         <item>Decaf Tea</item>
+        <item>Milk</item>
+        <item>Yogurt</item>
+        <item>Ice Cream</item>
         <item>Other</item>
     </string-array>
 
     <string-array name="date_formats">
+        <item>yyyy-MM-dd (2020-02-01)</item>
         <item>dd/MM/yyyy (01/02/2020)</item>
         <item>dd.MM.yyyy (01.02.2020)</item>
         <item>d.M.yyyy (1.2.2020)</item>
         <item>MM/dd/yyyy (02/01/2020)</item>
         <item>MM-dd-yyyy (02-01-2020)</item>
         <item>d MMM yyyy (1 Feb 2020)</item>
+        <item>yyyy-MM-dd, EEE (2020-02-01, Sat)</item>
         <item>EEE, d MMM yyyy (Sat, 1 Feb 2020)</item>
         <item>EEE, d.M.yyyy (Sat, 1.2.2020)</item>
         <item>EEE, MM-dd-yyyy (Sat, 02-01-2020)</item>
