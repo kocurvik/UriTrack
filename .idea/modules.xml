@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TabApp.iml" filepath="$PROJECT_DIR$/TabApp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TabApp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TabApp.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TabApp.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TabApp.app.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TabApp.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TabApp.app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TabApp.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TabApp.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/UriTrack.iml" filepath="$PROJECT_DIR$/.idea/modules/UriTrack.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/UriTrack.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/UriTrack.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/UriTrack.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/UriTrack.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/UriTrack.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/UriTrack.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/UriTrack.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/UriTrack.app.unitTest.iml" />
     </modules>
   </component>
 </project>
