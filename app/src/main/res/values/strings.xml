@@ -2,6 +2,7 @@
     <string name="app_name">UriTrack</string>
     <string name="exportPDF">Export PDF</string>
     <string name="exportCSV">Export CSV</string>
+    <string name="exportXLSX">Export XLSX</string>
     <string name="export">Export Data</string>
     <string name="imPort">Import Data</string>
     <string name="clear">Clear Data</string>
