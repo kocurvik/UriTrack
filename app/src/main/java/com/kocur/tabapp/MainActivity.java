@@ -203,6 +203,15 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.exportXLSX) {
+            /*Toast toast = Toast.makeText(getBaseContext(),"Not implemented yet!",Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();+*/
+            ExcelDialog excelDialog = new ExcelDialog();
+            excelDialog.show(getSupportFragmentManager(),"ExcelDialog");
+            return true;
+        }
+
         if (id == R.id.export) {
             ExportDialog exportDialog = new ExportDialog();
             exportDialog.show(getSupportFragmentManager(),"exportDialog");

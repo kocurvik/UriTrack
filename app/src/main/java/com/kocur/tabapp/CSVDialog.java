@@ -13,9 +13,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.Locale;
 
 /**
  * Created by madcrow on 5/24/2025.
@@ -37,7 +39,10 @@ public class CSVDialog extends GeneralExportDialog {
                 filePath.mkdir();
             }
 
-            File outputFile = File.createTempFile("UriTrackSheet-", ".csv", filePath);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss", Locale.getDefault());
+            String timestamp = sdf.format(new Date());
+            String fileName = "UriTrackSheet " + timestamp + ".csv";
+            File outputFile = new File(filePath, fileName);
 
             PrintWriter writer = new PrintWriter(new FileWriter(outputFile));
             writeCSV(writer, generateEventListList());
@@ -50,7 +55,7 @@ public class CSVDialog extends GeneralExportDialog {
         }
     }
     private void writeCSV(PrintWriter writer, ArrayList<CSVManager> superList) throws Exception {
-        writer.println("Date,Time,Event Type,Volume,Urge Intensity,Drink Type,Note");
+        writer.println("Date,Time,Event Type,Volume (" + MainActivity.getVolumeString() + "),Urge Intensity (0..5),Drink Type,Note");
 
         for (CSVManager manager : superList) {
             ArrayList<UriEvent> subList = manager.getList();
@@ -75,15 +80,4 @@ public class CSVDialog extends GeneralExportDialog {
             }
         }
     }
-
-    private ArrayList<CSVManager> generateEventListList() throws ParseException, IOException {
-        LinkedList<Date> dateList = dateManager.getDates();
-        ArrayList<CSVManager> superList = new ArrayList<CSVManager>();
-        for (Date date: dateList){
-            CSVManager manager = new CSVManager(date, getContext());
-            superList.add(manager);
-        }
-        return superList;
-    }
-
 }
