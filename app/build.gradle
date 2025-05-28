@@ -4,13 +4,13 @@ plugins {
 
 android {
     namespace "com.kocur.tabapp"
-    compileSdkVersion 33
+    compileSdkVersion 34
     defaultConfig {
         applicationId "com.kocur.tabapp"
         minSdk 24
-        targetSdk 33
-        versionCode 16
-        versionName "1.5.0"
+        targetSdk 34
+        versionCode 18
+        versionName "1.6.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
