@@ -27,9 +27,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.Locale;
 
 /**
  * Created by kocur on 8/26/2017.
@@ -50,10 +52,11 @@ public class PDFDialog extends GeneralExportDialog {
             if (!filePath.exists()) {
                 filePath.mkdir();
             }
-                /*File outputFile = new File(imagePath, "tosend.zip");*/
 
-                /*File outputDir = getContext().getCacheDir(); // context being the Activity pointer*/
-            File outputFile = File.createTempFile("UriTrackSheet-", ".pdf", filePath);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss", Locale.getDefault());
+            String timestamp = sdf.format(new Date());
+            String fileName = "UriTrackSheet " + timestamp + ".pdf";
+            File outputFile = new File(filePath, fileName);
 
             Document document = new Document(PageSize.A4, 0, 0, 50, 50);
             FileOutputStream out = new FileOutputStream(outputFile);
@@ -100,7 +103,8 @@ public class PDFDialog extends GeneralExportDialog {
 
                     document.add(topPar);
                     table = generateEmptyTable();
-                    remaining = 45;
+                    //remaining = 45;
+                    remaining = 40;
                     spandone = false;
                 }
 
@@ -191,17 +195,6 @@ public class PDFDialog extends GeneralExportDialog {
         } else {
             document.add(table);
         }
-    }
-
-    private ArrayList<CSVManager> generateEventListList() throws ParseException, IOException {
-        LinkedList<Date> dateList = dateManager.getDates();
-        ArrayList<CSVManager> superList = new ArrayList<CSVManager>();
-        for (Date date: dateList){
-            ArrayList<UriEvent> subList = new ArrayList<UriEvent>();
-            CSVManager manager = new CSVManager(date, getContext());
-            superList.add(manager);
-        }
-        return superList;
     }
 
     private PdfPTable generateEmptyTable() throws Exception {

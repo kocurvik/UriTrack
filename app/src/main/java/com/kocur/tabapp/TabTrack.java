@@ -298,7 +298,7 @@ public class TabTrack extends Fragment implements View.OnClickListener, Spinner.
     }
 
     public enum types {Urination, Intake, Leak, Urge, Catheter, Note};
-    public enum drinks {Water, Soda, Juice, Coffee, Tea, Beer, Wine, Alcohol, Soup, Fruit, DecafCoffee, DecafTea, Other}
+    public enum drinks {Water, Soda, Juice, Coffee, Tea, Beer, Wine, Alcohol, Soup, Fruit, DecafCoffee, DecafTea, Milk, Yogurt, IceCream, Other}
 
     /**
      * Handle spinner selection both type of event and drink

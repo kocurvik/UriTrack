@@ -13,7 +13,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
 
 /**
  * Created by kocur on 8/26/2017.
@@ -116,5 +121,13 @@ public abstract class GeneralExportDialog extends DialogFragment implements View
     }
 
     abstract void performAction();
-
+    protected ArrayList<CSVManager> generateEventListList() throws ParseException, IOException {
+        LinkedList<Date> dateList = dateManager.getDates();
+        ArrayList<CSVManager> superList = new ArrayList<CSVManager>();
+        for (Date date: dateList){
+            CSVManager manager = new CSVManager(date, getContext());
+            superList.add(manager);
+        }
+        return superList;
+    }
 }
